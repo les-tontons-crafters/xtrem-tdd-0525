@@ -1,9 +1,4 @@
 # Xtrem TDD workshop
-This workshop has been created for [Agilille 2022](https://agilille.fr/) conference.  
-
-Here is the pitch of it :
-
-```markdown
 You have probably already heard or practiced Test-Driven Development (TDD) but have you already tried it in an Xtrem way?
 
 What do we mean by Xtrem?
@@ -22,7 +17,6 @@ Here are some example of constraints that we have documented on our website :
 - and much more ...
 
 By overcoming those constraints you will learn new ways of designing your code that you will be able to use in your day-to-day.
-```
 
 ![Welcome](docs/img/xtrem-tdd-logo.png)
 
