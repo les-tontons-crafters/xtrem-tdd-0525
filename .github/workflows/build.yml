@@ -33,10 +33,7 @@ jobs:
     - name: Build with Maven
       run: mvn -f java/pom.xml clean install
 
-    - name: SonarCloud Scan
-      uses: SonarSource/sonarcloud-github-action@v2
-      with:
-        projectBaseDir: java
-        projectKey: les-tontons-crafters_xtrem-tdd-0525
-        organization: les-tontons-crafters
-        token: ${{ secrets.SONAR_TOKEN }}
+    - name: Build and analyze
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=les-tontons-crafters_xtrem-tdd-0525
