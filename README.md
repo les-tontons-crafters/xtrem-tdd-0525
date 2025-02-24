@@ -1,4 +1,13 @@
 # Xtrem TDD workshop
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=les-tontons-crafters_xtrem-tdd-0525&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=les-tontons-crafters_xtrem-tdd-0525)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=les-tontons-crafters_xtrem-tdd-0525&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=les-tontons-crafters_xtrem-tdd-0525)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=les-tontons-crafters_xtrem-tdd-0525&metric=coverage)](https://sonarcloud.io/summary/new_code?id=les-tontons-crafters_xtrem-tdd-0525)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=les-tontons-crafters_xtrem-tdd-0525&metric=bugs)](https://sonarcloud.io/summary/new_code?id=les-tontons-crafters_xtrem-tdd-0525)
+
+[![CodeScene Average Code Health](https://codescene.io/projects/64234/status-badges/average-code-health)](https://codescene.io/projects/64234)
+[![CodeScene System Mastery](https://codescene.io/projects/64234/status-badges/system-mastery)](https://codescene.io/projects/64234)
+[![CodeScene general](https://codescene.io/images/analyzed-by-codescene-badge.svg)](https://codescene.io/projects/64234)
+
 You have probably already heard or practiced Test-Driven Development (TDD) but have you already tried it in an Xtrem way?
 
 What do we mean by Xtrem?
