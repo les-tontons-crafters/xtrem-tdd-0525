@@ -33,8 +33,12 @@ jobs:
     - name: Build with Maven
       run: mvn -f java/pom.xml clean install
 
-    - name: Build and analyze
+    - name: Build, generate JaCoCo report and analyze
       working-directory: ./java
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=les-tontons-crafters_xtrem-tdd-0525 -Dsonar.organization=les-tontons-crafters
+      run: |
+        mvn -B verify jacoco:report org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+          -Dsonar.projectKey=les-tontons-crafters_xtrem-tdd-0525 \
+          -Dsonar.organization=les-tontons-crafters \
+          -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
