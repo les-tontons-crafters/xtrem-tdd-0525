@@ -34,6 +34,7 @@ jobs:
       run: mvn -f java/pom.xml clean install
 
     - name: Build and analyze
+      working-directory: ./java
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=les-tontons-crafters_xtrem-tdd-0525
