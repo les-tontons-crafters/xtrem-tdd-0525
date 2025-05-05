@@ -6,15 +6,14 @@ import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 
-import static money_problem.domain.Currency.EUR;
-import static money_problem.domain.Currency.USD;
+import static money_problem.domain.Currency.*;
 
 public class PortfolioTest {
     
     @Test
     @DisplayName("1.2 USD equals 1 EUR")
-    void shouldConvertEuroCorrectly(){
-        Bank bank = Bank.withExchangeRate(EUR, USD, 1.2);
+    void shouldConvertEuroCorrectly() throws MissingExchangeRateException {
+        Bank bank = Bank.withExchangeRate(USD, EUR, 1.0 / 1.2);
         var portfolio = new Portfolio(bank);
         portfolio.add(new Position(1.2, Currency.USD));
 
@@ -25,7 +24,7 @@ public class PortfolioTest {
     
     @Test
     @DisplayName("10 EUR + 5 USD equal 17 USD")
-    public void shouldAddEurosAndUsd(){
+    public void shouldAddEurosAndUsd() throws MissingExchangeRateException {
         Bank bank = Bank.withExchangeRate(EUR, USD, 1.2);
         var portfolio = new Portfolio(bank);
         portfolio.add(new Position(10, Currency.EUR));
@@ -38,13 +37,13 @@ public class PortfolioTest {
 
     @Test
     @DisplayName("1100 KRW + 1 USD equal 2200 KRW")
-    public void shouldAddKrwAndUsd(){
-        Bank bank = Bank.withExchangeRate(EUR, USD, 1.2);
+    public void shouldAddKrwAndUsd() throws MissingExchangeRateException {
+        Bank bank = Bank.withExchangeRate(USD, KRW, 1100);
         var portfolio = new Portfolio(bank);
-        portfolio.add(new Position(1100, Currency.KRW));
+        portfolio.add(new Position(1100, KRW));
         portfolio.add(new Position(1, Currency.USD));
 
-        double total = portfolio.getTotal(Currency.KRW);
+        double total = portfolio.getTotal(KRW);
 
         Assertions.assertThat(total).isEqualTo(2200.0);
     }

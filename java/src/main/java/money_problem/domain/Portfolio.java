@@ -17,14 +17,12 @@ public class Portfolio {
         positions.add(position);
     }
 
-    public double getTotal(Currency currency) {
-        
-        if(Currency.KRW.equals(currency)){
-            return 2200;
+    public double getTotal(Currency currency) throws MissingExchangeRateException {
+        double sum = 0;
+        for (Position position : positions) {
+            double converted = bank.convert(position.amount(), position.currency(), currency);
+            sum += converted;
         }
-        if(Currency.EUR.equals(currency)){
-            return 1;
-        }
-        return 17;
+        return sum;
     }
 }
