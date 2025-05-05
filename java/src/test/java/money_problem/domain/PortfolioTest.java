@@ -12,6 +12,17 @@ class PortfolioTest {
     private static final CurrencyConverter currencyConverter = CurrencyConverter.withExchangeRate(USD, EUR, 0.83);
 
     @Test
+    void add5UsdAnd5UsdThenReturn10Usd() throws MissingExchangeRateException {
+        Portfolio testee = new Portfolio();
+        testee.add(5, Currency.USD);
+
+        testee.add(5, Currency.USD);
+
+        double actual = testee.amount(USD, currencyConverter);
+        assertThat(actual).isEqualTo(10);
+    }
+
+    @Test
     void whenCreatingEmptyPortfolioThenReturnZero() throws MissingExchangeRateException {
         Portfolio testee = new Portfolio();
 

@@ -7,7 +7,7 @@ public class Portfolio {
     private double amount = 0;
 
     public void add(double amount, Currency currency) {
-        this.amount = amount;
+        this.amount += amount;
     }
 
     public double amount(Currency to, CurrencyConverter currencyConverter) throws MissingExchangeRateException {
