@@ -6,10 +6,10 @@ import java.util.List;
 public class Portfolio {
     
     private final List<Position> positions = new ArrayList<>();
-    private final Bank bank;
+    private final CurrencyConverter currencyConverter;
     
-    public Portfolio(Bank bank) {
-        this.bank = bank;
+    public Portfolio(CurrencyConverter currencyConverter) {
+        this.currencyConverter = currencyConverter;
     }
 
     public void add(Position position) {
@@ -19,7 +19,7 @@ public class Portfolio {
     public double getTotal(Currency currency) throws MissingExchangeRateException {
         double sum = 0;
         for (Position position : positions) {
-            double converted = bank.convert(position.amount(), position.currency(), currency);
+            double converted = currencyConverter.convert(position.amount(), position.currency(), currency);
             sum += converted;
         }
         return sum;

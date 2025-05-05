@@ -3,15 +3,15 @@ package money_problem.domain;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class Bank {
+public final class CurrencyConverter {
     private final Map<String, Double> exchangeRates;
 
-    private Bank(Map<String, Double> exchangeRates) {
+    private CurrencyConverter(Map<String, Double> exchangeRates) {
         this.exchangeRates = exchangeRates;
     }
 
-    public static Bank withExchangeRate(Currency from, Currency to, double rate) {
-        var bank = new Bank(new HashMap<>());
+    public static CurrencyConverter withExchangeRate(Currency from, Currency to, double rate) {
+        var bank = new CurrencyConverter(new HashMap<>());
         bank.addExchangeRate(from, to, rate);
 
         return bank;

@@ -9,19 +9,19 @@ import static money_problem.domain.Currency.*;
 
 class PortfolioTest {
 
-	private static Bank bank;
+	private static CurrencyConverter currencyConverter;
 
 	@BeforeAll
 	static void setup() {
-		bank = Bank.withExchangeRate(USD, EUR, 1.0 / 1.2);
-		bank.addExchangeRate(EUR, USD, 1.2);
-		bank.addExchangeRate(USD, KRW, 1100);
+		currencyConverter = CurrencyConverter.withExchangeRate(USD, EUR, 1.0 / 1.2);
+		currencyConverter.addExchangeRate(EUR, USD, 1.2);
+		currencyConverter.addExchangeRate(USD, KRW, 1100);
 	}
 
 	@Test
-	@DisplayName("1.2 USD equals 1 EUR")
-	void shouldConvertEuroCorrectly() throws MissingExchangeRateException {
-		var portfolio = new Portfolio(bank);
+	@DisplayName("1.2 USD = 1 EUR")
+	void getTotalInEur() throws MissingExchangeRateException {
+		var portfolio = new Portfolio(currencyConverter);
 		portfolio.add(new Position(1.2, Currency.USD));
 
 		double total = portfolio.getTotal(Currency.EUR);
@@ -30,9 +30,9 @@ class PortfolioTest {
 	}
 
 	@Test
-	@DisplayName("10 EUR + 5 USD equal 17 USD")
-	void shouldAddEurosAndUsd() throws MissingExchangeRateException {
-		var portfolio = new Portfolio(bank);
+	@DisplayName("10 EUR + 5 USD = 17 USD")
+	void getTotalInUsd() throws MissingExchangeRateException {
+		var portfolio = new Portfolio(currencyConverter);
 		portfolio.add(new Position(10, Currency.EUR));
 		portfolio.add(new Position(5, Currency.USD));
 
@@ -42,9 +42,9 @@ class PortfolioTest {
 	}
 
 	@Test
-	@DisplayName("1100 KRW + 1 USD equal 2200 KRW")
-	void shouldAddKrwAndUsd() throws MissingExchangeRateException {
-		var portfolio = new Portfolio(bank);
+	@DisplayName("1100 KRW + 1 USD = 2200 KRW")
+	void getTotalInKrw() throws MissingExchangeRateException {
+		var portfolio = new Portfolio(currencyConverter);
 		portfolio.add(new Position(1100, KRW));
 		portfolio.add(new Position(1, Currency.USD));
 
