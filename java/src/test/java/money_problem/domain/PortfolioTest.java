@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static money_problem.domain.Currency.*;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class PortfolioTest {
 
@@ -20,7 +21,7 @@ class PortfolioTest {
 
 	@Test
 	@DisplayName("1.2 USD = 1 EUR")
-	void getTotalInEur() throws MissingExchangeRateException {
+	void getTotalInEur() throws MissingExchangeRatesException {
 		var portfolio = new Portfolio(currencyConverter);
 		portfolio.add(new Position(1.2, Currency.USD));
 
@@ -31,7 +32,7 @@ class PortfolioTest {
 
 	@Test
 	@DisplayName("10 EUR + 5 USD = 17 USD")
-	void getTotalInUsd() throws MissingExchangeRateException {
+	void getTotalInUsd() throws MissingExchangeRatesException {
 		var portfolio = new Portfolio(currencyConverter);
 		portfolio.add(new Position(10, Currency.EUR));
 		portfolio.add(new Position(5, Currency.USD));
@@ -43,7 +44,7 @@ class PortfolioTest {
 
 	@Test
 	@DisplayName("1100 KRW + 1 USD = 2200 KRW")
-	void getTotalInKrw() throws MissingExchangeRateException {
+	void getTotalInKrw() throws MissingExchangeRatesException {
 		var portfolio = new Portfolio(currencyConverter);
 		portfolio.add(new Position(1100, KRW));
 		portfolio.add(new Position(1, Currency.USD));
@@ -51,6 +52,17 @@ class PortfolioTest {
 		double total = portfolio.getTotal(KRW);
 
 		Assertions.assertThat(total).isEqualTo(2200.0);
+	}
+
+	@Test
+	void getTotalShouldReturnMissingExchangeRatesExceptionWhenMultipleExchangeRatesMissing() {
+		var portfolio = new Portfolio(CurrencyConverter.withExchangeRate(KRW, USD, 1));
+		portfolio.add(new Position(1100, KRW));
+		portfolio.add(new Position(1, Currency.USD));
+
+		assertThatThrownBy(() -> portfolio.getTotal(EUR))
+				.isInstanceOf(MissingExchangeRatesException.class)
+				.hasMessage("KRW->EUR,USD->EUR");
 	}
 
 }

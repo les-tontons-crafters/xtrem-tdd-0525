@@ -16,12 +16,23 @@ public class Portfolio {
         positions.add(position);
     }
 
-    public double getTotal(Currency targetCurrency) throws MissingExchangeRateException {
+    public double getTotal(Currency targetCurrency) throws MissingExchangeRatesException {
         double sum = 0;
+        StringBuilder messages = new StringBuilder();
         for (Position position : positions) {
-            double converted = currencyConverter.convert(position.amount(), position.currency(), targetCurrency);
+            double converted = 0;
+            try {
+                converted = currencyConverter.convert(position.amount(), position.currency(), targetCurrency);
+            } catch (MissingExchangeRateException e) {
+                messages.append(e.getMessage()).append(",");
+            }
             sum += converted;
         }
+        String messagesString = messages.toString();
+        if (!messagesString.isEmpty()) {
+            throw new MissingExchangeRatesException(messagesString.substring(0, messagesString.length() - 1));
+        }
+
         return sum;
     }
 }
