@@ -2,7 +2,7 @@ package money_problem.domain;
 
 public class Portfolio {
     
-    public void add(double amount, Currency currency) {
+    public void add(Position position) {
     }
 
     public double getTotal(Currency currency) {

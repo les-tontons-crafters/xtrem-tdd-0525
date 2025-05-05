@@ -10,7 +10,7 @@ public class PortfolioTest {
     @DisplayName("1.2 USD equals 1 EUR")
     void shouldConvertEuroCorrectly(){
         var portfolio = new Portfolio();
-        portfolio.add(1.2,  Currency.USD);
+        portfolio.add(new Position(1.2, Currency.USD));
 
         double total = portfolio.getTotal(Currency.EUR);
 
@@ -21,8 +21,8 @@ public class PortfolioTest {
     @DisplayName("10 EUR + 5 USD equal 17 USD")
     public void shouldAddEurosAndUsd(){
         var portfolio = new Portfolio();
-        portfolio.add(10, Currency.EUR);
-        portfolio.add(5, Currency.USD);
+        portfolio.add(new Position(10, Currency.EUR));
+        portfolio.add(new Position(5, Currency.USD));
 
         double total = portfolio.getTotal(Currency.USD);
 
@@ -33,8 +33,8 @@ public class PortfolioTest {
     @DisplayName("1100 KRW + 1 USD equal 2200 KRW")
     public void shouldAddKrwAndUsd(){
         var portfolio = new Portfolio();
-        portfolio.add(1100, Currency.KRW);
-        portfolio.add(1, Currency.USD);
+        portfolio.add(new Position(1100, Currency.KRW));
+        portfolio.add(new Position(1, Currency.USD));
 
         double total = portfolio.getTotal(Currency.KRW);
 
