@@ -1,7 +1,10 @@
 package money_problem.domain;
 
 import org.assertj.core.data.Offset;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static money_problem.domain.Currency.EUR;
 import static money_problem.domain.Currency.USD;
@@ -74,6 +77,23 @@ class PortfolioTest {
         assertThat(actual).isCloseTo(1.66, Offset.offset(0.01));
     }
 
+    @Disabled
+    @ParameterizedTest
+    @CsvSource({
+            "1.0, 0.0, 0.0, 1.0"
+    })
+    void addAmmount(double dollar, double euro, double koroansomething, double expectedTotalAmmount) throws MissingExchangeRateException {
+        final Portfolio testee = new Portfolio();
+
+        testee.add(dollar, Currency.USD);
+        testee.add(euro, Currency.EUR);
+        testee.add(koroansomething, Currency.KRW);
+
+        final double actual = testee.amount(Currency.EUR, currencyConverter);
+
+        assertThat(actual).isCloseTo(expectedTotalAmmount, Offset.offset(0.01));
+    }
+
     //Replace amount through currencyMap
-// 1 USD + 1100 KRW = 2200 KRW
+    //1 USD + 1100 KRW = 2200 KRW
 }
