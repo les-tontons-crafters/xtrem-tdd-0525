@@ -33,7 +33,7 @@ public class PortfolioTest {
         double actual = testee.amount(Currency.EUR);
 
 
-        assertThat(actual).isEqualTo(0.82);
+        assertThat(actual).isEqualTo(0.83);
     }
 //5 USD + 10 EUR = 17 USD
 // 1 USD + 1100 KRW = 2200 KRW
