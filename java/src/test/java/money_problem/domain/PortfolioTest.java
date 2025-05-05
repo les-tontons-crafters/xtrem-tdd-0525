@@ -31,8 +31,8 @@ class PortfolioTest {
         testee.add(new Money(5, USD));
         testee.add(new Money(10, EUR));
 
-        double actual = testee.amount(USD);
-        assertThat(actual).isEqualTo(17);
+        Money actual = testee.amountWithMoney(USD);
+        assertThat(actual).isEqualTo(new Money(17, USD));
     }
 
     @Test

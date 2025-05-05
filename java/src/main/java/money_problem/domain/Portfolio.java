@@ -43,4 +43,7 @@ public class Portfolio {
         return new Money(totalAmount, currency);
     }
 
+    public Money amountWithMoney(Currency currency) throws MissingExchangeRateException {
+        return new Money(amount(currency), currency);
+    }
 }
