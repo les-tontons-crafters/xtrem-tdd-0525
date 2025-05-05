@@ -16,10 +16,10 @@ public class Portfolio {
         positions.add(position);
     }
 
-    public double getTotal(Currency currency) throws MissingExchangeRateException {
+    public double getTotal(Currency targetCurrency) throws MissingExchangeRateException {
         double sum = 0;
         for (Position position : positions) {
-            double converted = currencyConverter.convert(position.amount(), position.currency(), currency);
+            double converted = currencyConverter.convert(position.amount(), position.currency(), targetCurrency);
             sum += converted;
         }
         return sum;
