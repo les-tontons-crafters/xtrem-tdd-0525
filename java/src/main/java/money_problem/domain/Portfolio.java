@@ -1,5 +1,6 @@
 package money_problem.domain;
 
+import static money_problem.domain.Currency.EUR;
 import static money_problem.domain.Currency.USD;
 
 public class Portfolio {
@@ -7,6 +8,11 @@ public class Portfolio {
     private double amount = 0;
 
     public void add(double amount, Currency currency) {
+        if (currency.equals(EUR)) {
+            double amountTemp = amount * 1.2;
+            this.amount += amountTemp;
+            return;
+        }
         this.amount += amount;
     }
 
