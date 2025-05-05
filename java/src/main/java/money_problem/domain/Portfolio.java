@@ -14,17 +14,11 @@ public class Portfolio {
     }
 
     public double amount(Currency to, CurrencyConverter currencyConverter) throws MissingExchangeRateException {
-        var total = 0.0;
+        var totalPortfolioValue = 0.0;
         for (Map.Entry<Currency, Double> entry : currencyMap.entrySet()) {
-            Currency currency = entry.getKey();
-            Double amount = entry.getValue();
-            if (currency == to) {
-                total += amount;
-            } else {
-                total += currencyConverter.convert(amount, entry.getKey(), to);
-            }
+            totalPortfolioValue += currencyConverter.convert(entry.getValue(), entry.getKey(), to);
         }
-        return total;
+        return totalPortfolioValue;
     }
 
 }
