@@ -93,6 +93,27 @@ class PortfolioTest {
         assertThat(actual).isCloseTo(expectedTotalAmmount, Offset.offset(0.01));
     }
 
+    @ParameterizedTest
+    @CsvSource({
+            "1.0, 0.0, 0.0, 1.0, USD",
+            "1.0, 0.0, 0.0, 0.0, EUR",
+            "1.0, 2.5, 0.0, 2.5, EUR"
+    })
+    void sumCurrency(double dollar, double euro, double southKoreanWon, double expectedTotalAmmount, Currency expectedCurrency) throws MissingExchangeRateException {
+        currencyConverter.addExchangeRate(EUR, USD, 1.2);
+        currencyConverter.addExchangeRate(USD, EUR, 0.83);
+        currencyConverter.addExchangeRate(KRW, USD, 0.00073);
+        Portfolio testee = new Portfolio(currencyConverter);
+
+        testee.add(new Money(dollar, USD));
+        testee.add(new Money(euro, EUR));
+        testee.add(new Money(southKoreanWon, KRW));
+
+        Money actual = testee.sumCurrency(expectedCurrency);
+
+        assertThat(actual).isEqualTo(new Money(expectedTotalAmmount, expectedCurrency));
+    }
+
     @Test
     void amountWhenPortfolioEmptyThenReturnZero() {
         Portfolio testee = new Portfolio(currencyConverter);
