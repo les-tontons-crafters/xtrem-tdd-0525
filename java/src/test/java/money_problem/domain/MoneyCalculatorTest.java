@@ -27,5 +27,4 @@ class MoneyCalculatorTest {
         assertThat(MoneyCalculator.divide(4002, KRW, 4))
                 .isEqualTo(1000.5);
     }
-    //
 }
