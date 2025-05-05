@@ -26,6 +26,7 @@ class PortfolioTest {
     void add5UsdAnd10EurThenReturn17Usd() throws MissingExchangeRateException {
         final Portfolio testee = new Portfolio();
         testee.add(5, Currency.USD);
+        currencyConverter.addExchangeRate(EUR, USD, 1.2);
 
         testee.add(10, EUR);
 
