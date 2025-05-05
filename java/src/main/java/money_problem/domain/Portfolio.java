@@ -4,7 +4,7 @@ public class Portfolio {
 
     private double amount = 0;
 
-    public double get(Currency currency) {
+    public double amount(Currency currency) {
         return amount;
     }
 

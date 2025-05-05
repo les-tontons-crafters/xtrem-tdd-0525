@@ -10,7 +10,7 @@ public class PortfolioTest {
     void whenCreatingEmptyPortfolioThenReturnZero() {
         Portfolio testee = new Portfolio();
 
-        double actual = testee.get(Currency.USD);
+        double actual = testee.amount(Currency.USD);
 
         assertThat(actual).isZero();
     }
@@ -21,8 +21,9 @@ public class PortfolioTest {
 
         testee.add(1.0, Currency.USD);
 
-        double actual = testee.get(Currency.USD);
+        double actual = testee.amount(Currency.USD);
         assertThat(actual).isEqualTo(1.0);
     }
-
+//5 USD + 10 EUR = 17 USD
+// 1 USD + 1100 KRW = 2200 KRW
 }
