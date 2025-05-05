@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import static money_problem.domain.Currency.*;
 import static money_problem.domain.Currency.EUR;
 import static money_problem.domain.Currency.USD;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -17,9 +18,9 @@ class PortfolioTest {
     @Test
     void add5UsdAnd5UsdThenReturn10Usd() throws MissingExchangeRateException {
         final Portfolio testee = new Portfolio();
-        testee.add(5, Currency.USD);
+        testee.add(5, USD);
 
-        testee.add(5, Currency.USD);
+        testee.add(5, USD);
 
         final double actual = testee.amount(USD, currencyConverter);
         assertThat(actual).isEqualTo(10);
@@ -30,7 +31,7 @@ class PortfolioTest {
         final Portfolio testee = new Portfolio();
         currencyConverter.addExchangeRate(EUR, USD, 1.2);
 
-        testee.add(5, Currency.USD);
+        testee.add(5, USD);
         testee.add(10, EUR);
 
         final double actual = testee.amount(USD, currencyConverter);
@@ -41,7 +42,7 @@ class PortfolioTest {
     void whenCreatingEmptyPortfolioThenReturnZero() throws MissingExchangeRateException {
         final Portfolio testee = new Portfolio();
 
-        final double actual = testee.amount(Currency.USD, currencyConverter);
+        final double actual = testee.amount(USD, currencyConverter);
 
         assertThat(actual).isZero();
     }
@@ -50,18 +51,18 @@ class PortfolioTest {
     void addParticularAmountInUsdWhenPortfolioEmptyThenReturnExpectedAmount() throws MissingExchangeRateException {
         final Portfolio testee = new Portfolio();
 
-        testee.add(1.0, Currency.USD);
+        testee.add(1.0, USD);
 
-        final double actual = testee.amount(Currency.USD, currencyConverter);
+        final double actual = testee.amount(USD, currencyConverter);
         assertThat(actual).isEqualTo(1.0);
     }
 
     @Test
     void addParticularAmountInUsdWhenPortfolioIsEmptyThenReturnExpectedAmountInEur() throws MissingExchangeRateException {
         final Portfolio testee = new Portfolio();
-        testee.add(1.0, Currency.USD);
+        testee.add(1.0, USD);
 
-        final double actual = testee.amount(Currency.EUR, currencyConverter);
+        final double actual = testee.amount(EUR, currencyConverter);
 
         assertThat(actual).isCloseTo(0.83, Offset.offset(0.01));
     }
@@ -70,26 +71,27 @@ class PortfolioTest {
     void addADifferentAmountInUsdWhenPortfolioIsEmptyThenReturnExpectedAmountInEur() throws MissingExchangeRateException {
         final Portfolio testee = new Portfolio();
 
-        testee.add(2.0, Currency.USD);
+        testee.add(2.0, USD);
 
-        final double actual = testee.amount(Currency.EUR, currencyConverter);
+        final double actual = testee.amount(EUR, currencyConverter);
 
         assertThat(actual).isCloseTo(1.66, Offset.offset(0.01));
     }
 
-    @Disabled
     @ParameterizedTest
     @CsvSource({
             "1.0, 0.0, 0.0, 1.0"
     })
-    void addAmmount(double dollar, double euro, double koroansomething, double expectedTotalAmmount) throws MissingExchangeRateException {
+    void addAmmount(double dollar, double euro, double southKoreanWon, double expectedTotalAmmount) throws MissingExchangeRateException {
         final Portfolio testee = new Portfolio();
+        currencyConverter.addExchangeRate(EUR, USD, 1.2);
+        currencyConverter.addExchangeRate(KRW, USD, 0.00073);
 
-        testee.add(dollar, Currency.USD);
-        testee.add(euro, Currency.EUR);
-        testee.add(koroansomething, Currency.KRW);
+        testee.add(dollar, USD);
+        testee.add(euro, EUR);
+        testee.add(southKoreanWon, KRW);
 
-        final double actual = testee.amount(Currency.EUR, currencyConverter);
+        final double actual = testee.amount(USD, currencyConverter);
 
         assertThat(actual).isCloseTo(expectedTotalAmmount, Offset.offset(0.01));
     }
