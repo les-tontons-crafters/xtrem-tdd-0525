@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Portfolio {
-    
+
     private final List<Position> positions = new ArrayList<>();
     private final CurrencyConverter currencyConverter;
-    
+
     public Portfolio(CurrencyConverter currencyConverter) {
         this.currencyConverter = currencyConverter;
     }
@@ -18,19 +18,19 @@ public class Portfolio {
 
     public double getTotal(Currency targetCurrency) throws MissingExchangeRatesException {
         double sum = 0;
-        StringBuilder messages = new StringBuilder();
+        List<String> errorMessages = new ArrayList<>();
         for (Position position : positions) {
             double converted = 0;
             try {
                 converted = currencyConverter.convert(position.amount(), position.currency(), targetCurrency);
             } catch (MissingExchangeRateException e) {
-                messages.append(e.getMessage()).append(",");
+                errorMessages.add(e.getMessage());
             }
             sum += converted;
         }
-        String messagesString = messages.toString();
-        if (!messagesString.isEmpty()) {
-            throw new MissingExchangeRatesException(messagesString.substring(0, messagesString.length() - 1));
+        if (!errorMessages.isEmpty()) {
+            String messagesString = String.join(",", errorMessages);
+            throw new MissingExchangeRatesException(messagesString);
         }
 
         return sum;
