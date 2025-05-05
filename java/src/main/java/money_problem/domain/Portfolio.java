@@ -6,16 +6,21 @@ import java.util.Map;
 public class Portfolio {
 
     private final Map<Currency, Double> currencyMap = new EnumMap<>(Currency.class);
+    private final CurrencyConverter currencyConverter;
 
-    public void add(double amount, Currency currency) {
-        double previousAmount = currencyMap.getOrDefault(currency, 0.0);
-        double currentAmount = amount + previousAmount;
+    public Portfolio(final CurrencyConverter currencyConverter) {
+        this.currencyConverter = currencyConverter;
+    }
+
+    public void add(final double amount, final Currency currency) {
+        final double previousAmount = currencyMap.getOrDefault(currency, 0.0);
+        final double currentAmount = amount + previousAmount;
         currencyMap.put(currency, currentAmount);
     }
 
-    public double amount(Currency to, CurrencyConverter currencyConverter) throws MissingExchangeRateException {
+    public double amount(final Currency to) throws MissingExchangeRateException {
         var totalPortfolioValue = 0.0;
-        for (Map.Entry<Currency, Double> entry : currencyMap.entrySet()) {
+        for (final Map.Entry<Currency, Double> entry : currencyMap.entrySet()) {
             totalPortfolioValue += currencyConverter.convert(entry.getValue(), entry.getKey(), to);
         }
         return totalPortfolioValue;
