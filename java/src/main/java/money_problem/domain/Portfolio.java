@@ -29,8 +29,7 @@ public class Portfolio {
             sum += converted;
         }
         if (!errorMessages.isEmpty()) {
-            String messagesString = String.join(",", errorMessages);
-            throw new MissingExchangeRatesException(messagesString);
+            throw new MissingExchangeRatesException(errorMessages);
         }
 
         return sum;
