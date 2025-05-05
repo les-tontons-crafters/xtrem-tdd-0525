@@ -1,7 +1,15 @@
 package money_problem.domain;
 
 public class Portfolio {
-    public double get(final Currency currency) {
-        return 0;
+
+    private double amount = 0;
+
+    public double get(Currency currency) {
+        return amount;
     }
+
+    public void add(double amount, Currency currency) {
+        this.amount = amount;
+    }
+
 }

@@ -8,8 +8,18 @@ public class PortfolioTest {
 
     @Test
     void emptyPortfolio() {
-        final Portfolio testee = new Portfolio();
-        final double actual = testee.get(Currency.USD);
+        Portfolio testee = new Portfolio();
+        double actual = testee.get(Currency.USD);
         assertThat(actual).isZero();
     }
+
+    @Test
+    void addUSD() {
+        Portfolio testee = new Portfolio();
+        testee.add(1.0, Currency.USD);
+
+        double actual = testee.get(Currency.USD);
+        assertThat(actual).isEqualTo(1.0);
+    }
+
 }
