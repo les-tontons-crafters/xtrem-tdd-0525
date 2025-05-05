@@ -15,9 +15,9 @@ class PortfolioTest {
     @Test
     void add5UsdAnd5UsdThenReturn10Usd() throws MissingExchangeRateException {
         final Portfolio testee = new Portfolio(currencyConverter);
-        testee.add(5, USD);
+        testee.add(new Money(5, USD));
 
-        testee.add(5, USD);
+        testee.add(new Money(5, USD));
 
         final double actual = testee.amount(USD);
         assertThat(actual).isEqualTo(10);
@@ -28,8 +28,8 @@ class PortfolioTest {
         currencyConverter.addExchangeRate(EUR, USD, 1.2);
         final Portfolio testee = new Portfolio(currencyConverter);
 
-        testee.add(5, USD);
-        testee.add(10, EUR);
+        testee.add(new Money(5, USD));
+        testee.add(new Money(10, EUR));
 
         final double actual = testee.amount(USD);
         assertThat(actual).isEqualTo(17);
@@ -48,7 +48,7 @@ class PortfolioTest {
     void addParticularAmountInUsdWhenPortfolioEmptyThenReturnExpectedAmount() throws MissingExchangeRateException {
         final Portfolio testee = new Portfolio(currencyConverter);
 
-        testee.add(1.0, USD);
+        testee.add(new Money(1.0, USD));
 
         final double actual = testee.amount(USD);
         assertThat(actual).isEqualTo(1.0);
@@ -57,7 +57,7 @@ class PortfolioTest {
     @Test
     void addParticularAmountInUsdWhenPortfolioIsEmptyThenReturnExpectedAmountInEur() throws MissingExchangeRateException {
         final Portfolio testee = new Portfolio(currencyConverter);
-        testee.add(1.0, USD);
+        testee.add(new Money(1.0, USD));
 
         final double actual = testee.amount(EUR);
 
@@ -68,7 +68,7 @@ class PortfolioTest {
     void addADifferentAmountInUsdWhenPortfolioIsEmptyThenReturnExpectedAmountInEur() throws MissingExchangeRateException {
         final Portfolio testee = new Portfolio(currencyConverter);
 
-        testee.add(2.0, USD);
+        testee.add(new Money(2.0, USD));
 
         final double actual = testee.amount(EUR);
 
@@ -84,15 +84,13 @@ class PortfolioTest {
         currencyConverter.addExchangeRate(KRW, USD, 0.00073);
         final Portfolio testee = new Portfolio(currencyConverter);
 
-        testee.add(dollar, USD);
-        testee.add(euro, EUR);
-        testee.add(southKoreanWon, KRW);
+        testee.add(new Money(dollar, USD));
+        testee.add(new Money(euro, EUR));
+        testee.add(new Money(southKoreanWon, KRW));
 
         final double actual = testee.amount(USD);
 
         assertThat(actual).isCloseTo(expectedTotalAmmount, Offset.offset(0.01));
     }
 
-    //Replace amount through currencyMap
-    //1 USD + 1100 KRW = 2200 KRW
 }

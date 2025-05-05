@@ -12,10 +12,10 @@ public class Portfolio {
         this.currencyConverter = currencyConverter;
     }
 
-    public void add(final double amount, final Currency currency) {
-        final double previousAmount = currencyMap.getOrDefault(currency, 0.0);
-        final double currentAmount = amount + previousAmount;
-        currencyMap.put(currency, currentAmount);
+    public void add(final Money money) {
+        final double previousAmount = currencyMap.getOrDefault(money.currency(), 0.0);
+        final double currentAmount = money.amount() + previousAmount;
+        currencyMap.put(money.currency(), currentAmount);
     }
 
     public double amount(final Currency to) throws MissingExchangeRateException {
