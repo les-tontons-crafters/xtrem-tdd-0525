@@ -13,66 +13,66 @@ class PortfolioTest {
 
     @Test
     void add5UsdAnd5UsdThenReturn10Usd() throws MissingExchangeRateException {
-        Portfolio testee = new Portfolio();
+        final Portfolio testee = new Portfolio();
         testee.add(5, Currency.USD);
 
         testee.add(5, Currency.USD);
 
-        double actual = testee.amount(USD, currencyConverter);
+        final double actual = testee.amount(USD, currencyConverter);
         assertThat(actual).isEqualTo(10);
     }
 
     @Test
     void add5UsdAnd10EurThenReturn17Usd() throws MissingExchangeRateException {
-        Portfolio testee = new Portfolio();
+        final Portfolio testee = new Portfolio();
         testee.add(5, Currency.USD);
 
         testee.add(10, EUR);
 
-        double actual = testee.amount(USD, currencyConverter);
+        final double actual = testee.amount(USD, currencyConverter);
         assertThat(actual).isEqualTo(17);
     }
 
     @Test
     void whenCreatingEmptyPortfolioThenReturnZero() throws MissingExchangeRateException {
-        Portfolio testee = new Portfolio();
+        final Portfolio testee = new Portfolio();
 
-        double actual = testee.amount(Currency.USD, currencyConverter);
+        final double actual = testee.amount(Currency.USD, currencyConverter);
 
         assertThat(actual).isZero();
     }
 
     @Test
     void addParticularAmountInUsdWhenPortfolioEmptyThenReturnExpectedAmount() throws MissingExchangeRateException {
-        Portfolio testee = new Portfolio();
+        final Portfolio testee = new Portfolio();
 
         testee.add(1.0, Currency.USD);
 
-        double actual = testee.amount(Currency.USD, currencyConverter);
+        final double actual = testee.amount(Currency.USD, currencyConverter);
         assertThat(actual).isEqualTo(1.0);
     }
 
     @Test
     void addParticularAmountInUsdWhenPortfolioIsEmptyThenReturnExpectedAmountInEur() throws MissingExchangeRateException {
-        Portfolio testee = new Portfolio();
+        final Portfolio testee = new Portfolio();
         testee.add(1.0, Currency.USD);
 
-        double actual = testee.amount(Currency.EUR, currencyConverter);
+        final double actual = testee.amount(Currency.EUR, currencyConverter);
 
         assertThat(actual).isCloseTo(0.83, Offset.offset(0.01));
     }
 
     @Test
     void addADifferentAmountInUsdWhenPortfolioIsEmptyThenReturnExpectedAmountInEur() throws MissingExchangeRateException {
-        Portfolio testee = new Portfolio();
+        final Portfolio testee = new Portfolio();
 
         testee.add(2.0, Currency.USD);
 
-        double actual = testee.amount(Currency.EUR, currencyConverter);
+        final double actual = testee.amount(Currency.EUR, currencyConverter);
 
         assertThat(actual).isCloseTo(1.66, Offset.offset(0.01));
     }
 
-//5 USD + 10 EUR = 17 USD
+    //Replace amount through currencyMap
 // 1 USD + 1100 KRW = 2200 KRW
 }
