@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PortfolioTest {
 
     @Test
-    void emptyPortfolio() {
+    void whenCreatingEmptyPortfolioThenReturnZero() {
         Portfolio testee = new Portfolio();
 
         double actual = testee.get(Currency.USD);
