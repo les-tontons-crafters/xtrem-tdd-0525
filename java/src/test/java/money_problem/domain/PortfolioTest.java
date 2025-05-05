@@ -5,7 +5,18 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class PortfolioTest {
+    
+    @Test
+    @DisplayName("1.2 USD equals 1 EUR")
+    void shouldConvertEuroCorrectly(){
+        var portfolio = new Portfolio();
+        portfolio.add(1.2,  Currency.USD);
 
+        double total = portfolio.getTotal(Currency.EUR);
+
+        Assertions.assertThat(total).isEqualTo(1);
+    }
+    
     @Test
     @DisplayName("10 EUR + 5 USD equal 17 USD")
     public void shouldAddEurosAndUsd(){
@@ -29,4 +40,5 @@ public class PortfolioTest {
 
         Assertions.assertThat(total).isEqualTo(2200.0);
     }
+
 }
