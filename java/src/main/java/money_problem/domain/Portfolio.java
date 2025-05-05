@@ -1,11 +1,11 @@
 package money_problem.domain;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 public class Portfolio {
 
-    Map<Currency, Double> currencyMap = new HashMap<>();
+    private final Map<Currency, Double> currencyMap = new EnumMap<>(Currency.class);
 
     public void add(double amount, Currency currency) {
         Double previousAmount = currencyMap.getOrDefault(currency, 0.0);
