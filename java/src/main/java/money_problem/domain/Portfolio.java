@@ -5,13 +5,12 @@ import java.util.List;
 
 public class Portfolio {
     
-    private List<Position> positions = new ArrayList<>();
-    private Bank bank;
+    private final List<Position> positions = new ArrayList<>();
+    private final Bank bank;
     
     public Portfolio(Bank bank) {
         this.bank = bank;
     }
-
 
     public void add(Position position) {
         positions.add(position);
