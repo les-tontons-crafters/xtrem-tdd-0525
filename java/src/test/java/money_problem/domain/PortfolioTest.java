@@ -98,7 +98,17 @@ class PortfolioTest {
         Portfolio testee = new Portfolio(currencyConverter);
 
         Money actual = testee.sumCurrency(Currency.USD);
+
         assertThat(actual).isEqualTo(new Money(0.0, USD));
     }
 
+    @Test
+    void amountWhenPortfolioContains1UsdThenReturn1Usd() {
+        Portfolio testee = new Portfolio(currencyConverter);
+        testee.add(new Money(1.0, USD));
+
+        Money actual = testee.sumCurrency(USD);
+
+        assertThat(actual).isEqualTo(new Money(1.0, USD));
+    }
 }

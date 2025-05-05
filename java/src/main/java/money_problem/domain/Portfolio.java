@@ -21,6 +21,8 @@ public class Portfolio {
         double previousAmount = currencyMap.getOrDefault(money.currency(), 0.0);
         double currentAmount = money.amount() + previousAmount;
         currencyMap.put(money.currency(), currentAmount);
+
+        moneyList.add(money);
     }
 
     public double amount(Currency to) throws MissingExchangeRateException {
@@ -32,7 +34,13 @@ public class Portfolio {
     }
 
     public Money sumCurrency(Currency currency) {
-        return new Money(0.0, Currency.USD);
+        double totalAmount = 0.0;
+        for (Money money : moneyList) {
+            if (money.currency() == currency) {
+                totalAmount += money.amount();
+            }
+        }
+        return new Money(totalAmount, currency);
     }
 
 }
