@@ -15,6 +15,8 @@ class CurrencyConverterTest {
     void shouldConvertEuroToUsd() throws MissingExchangeRateException {
         assertThat(currencyConverter.convert(new Position(10, EUR), USD))
                 .isEqualTo(new Position(12,USD));
+        assertThat(currencyConverter.convertNew(new Position(10, EUR), USD))
+                .isEqualTo(new ConversionResult(new Position(12, USD)));
     }
 
     @Test
