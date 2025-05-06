@@ -1,5 +1,7 @@
 package money_problem.domain;
 
-public record ConversionError(String value) {
+import java.util.List;
+
+public record ConversionError(List<String> value) {
 
 }

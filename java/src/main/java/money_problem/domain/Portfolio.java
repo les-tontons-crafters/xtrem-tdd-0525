@@ -18,25 +18,23 @@ public class Portfolio {
     }
 
     public Result<Money, ConversionError> amount(final Currency currency) {
-        try {
-            var totalPortfolioValue = 0.0;
-            final List<String> missingExchangeRates = new ArrayList<>();
-            for (final Money money : moneyList) {
-                try {
-                    totalPortfolioValue += currencyConverter.convert(new Money(money.amount(), money.currency()), currency);
 
-                } catch (final MissingExchangeRateException e) {
-                    missingExchangeRates.add(e.getMessage());
+        var totalPortfolioValue = 0.0;
+        final List<String> missingExchangeRates = new ArrayList<>();
+        for (final Money money : moneyList) {
+            try {
+                totalPortfolioValue += currencyConverter.convert(new Money(money.amount(), money.currency()), currency);
 
-                }
+            } catch (final MissingExchangeRateException e) {
+                missingExchangeRates.add(e.getMessage());
+
             }
-            if (!missingExchangeRates.isEmpty()) {
-                throw new MissingExchangeRatesException(missingExchangeRates);
-            }
-            return new Result<>(new Money(totalPortfolioValue, currency));
-        } catch (final MissingExchangeRatesException e) {
-            return new Result<>(new ConversionError(e.getMessage()));
         }
+        if (!missingExchangeRates.isEmpty()) {
+            return new Result<>(new ConversionError(missingExchangeRates));
+        }
+        return new Result<>(new Money(totalPortfolioValue, currency));
+
     }
 
 }

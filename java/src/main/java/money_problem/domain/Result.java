@@ -44,7 +44,7 @@ public class Result<S extends Money, F extends ConversionError> {
     }
 
     public List<String> conversionErrors() {
-        return List.of(conversionError.value());
+        return conversionError.value();
     }
 
     public S success() {

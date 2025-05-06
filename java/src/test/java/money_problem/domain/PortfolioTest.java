@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import java.util.List;
+
 import static money_problem.domain.Currency.*;
 import static money_problem.domain.Moneys.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -93,7 +95,7 @@ class PortfolioTest {
     @CsvSource({
             "1.0, 0.0, 0.0, 1.0"
     })
-    void addAmount(final double dollar, final double euro, final double southKoreanWon, final double expectedTotalAmount)  {
+    void addAmount(final double dollar, final double euro, final double southKoreanWon, final double expectedTotalAmount) {
         currencyConverter.addExchangeRate(EUR, USD, 1.2);
         currencyConverter.addExchangeRate(KRW, USD, 0.00073);
 
@@ -131,7 +133,7 @@ class PortfolioTest {
 
         final Result<Money, ConversionError> actual = testee.amount(KRW);
 
-        final Result<Money, ConversionError> expected = new Result<>(new ConversionError("USD->KRW,EUR->KRW"));
+        final Result<Money, ConversionError> expected = new Result<>(new ConversionError(List.of("USD->KRW", "EUR->KRW")));
         assertThat(actual).isEqualTo(expected);
     }
 
