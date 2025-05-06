@@ -13,44 +13,34 @@ public class Portfolio {
 
     private final CurrencyConverter currencyConverter;
 
-    public Portfolio(CurrencyConverter currencyConverter) {
+    public Portfolio(final CurrencyConverter currencyConverter) {
         this.currencyConverter = currencyConverter;
     }
 
-    public void add(Money money) {
-        double previousAmount = currencyMap.getOrDefault(money.currency(), 0.0);
-        double currentAmount = money.amount() + previousAmount;
+    public void add(final Money money) {
+        final double previousAmount = currencyMap.getOrDefault(money.currency(), 0.0);
+        final double currentAmount = money.amount() + previousAmount;
         currencyMap.put(money.currency(), currentAmount);
 
         moneyList.add(money);
     }
 
-    public double amount(Currency to) throws MissingExchangeRateException {
+    public double amount(final Currency to) throws MissingExchangeRateException {
         var totalPortfolioValue = 0.0;
-        for (Map.Entry<Currency, Double> entry : currencyMap.entrySet()) {
+        for (final Map.Entry<Currency, Double> entry : currencyMap.entrySet()) {
             totalPortfolioValue += currencyConverter.convert(entry.getValue(), entry.getKey(), to);
         }
         return totalPortfolioValue;
     }
 
-    public Money sumCurrency(Currency currency) {
-        double totalAmount = 0.0;
-        for (Money money : moneyList) {
-            if (money.currency() == currency) {
-                totalAmount += money.amount();
-            }
-        }
-        return new Money(totalAmount, currency);
-    }
-
-    public Money amountWithMoney(Currency currency) throws MissingExchangeRateException {
-        // TODO : implement with a basic for loop for now
-        var doubleStream = moneyList.stream()
+    public Money amountWithMoney(final Currency currency) throws MissingExchangeRateException {
+        // TODO : implement with a basic for loop for now, this method should replace method 'amount()'
+        final var doubleStream = moneyList.stream()
                 .map(m -> {
                     try {
                         // TODO : use Money as well in the convert method
                         return currencyConverter.convert(m.amount(), m.currency(), currency);
-                    } catch (MissingExchangeRateException e) {
+                    } catch (final MissingExchangeRateException e) {
                         throw new RuntimeException(e);
                     }
                 });

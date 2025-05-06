@@ -80,7 +80,7 @@ class PortfolioTest {
     @CsvSource({
             "1.0, 0.0, 0.0, 1.0"
     })
-    void addAmmount(double dollar, double euro, double southKoreanWon, double expectedTotalAmmount) throws MissingExchangeRateException {
+    void addAmmount(final double dollar, final double euro, final double southKoreanWon, final double expectedTotalAmmount) throws MissingExchangeRateException {
         currencyConverter.addExchangeRate(EUR, USD, 1.2);
         currencyConverter.addExchangeRate(KRW, USD, 0.00073);
 
@@ -92,44 +92,11 @@ class PortfolioTest {
                 .isCloseTo(expectedTotalAmmount, Offset.offset(0.01));
     }
 
-    @ParameterizedTest
-    @CsvSource({
-            "1.0, 0.0, 0.0, 1.0, USD",
-            "1.0, 0.0, 0.0, 0.0, EUR",
-            "1.0, 2.5, 0.0, 2.5, EUR"
-    })
-    void sumCurrency(double dollar, double euro, double southKoreanWon, double expectedTotalAmmount, Currency expectedCurrency) throws MissingExchangeRateException {
-        currencyConverter.addExchangeRate(EUR, USD, 1.2);
-        currencyConverter.addExchangeRate(USD, EUR, 0.83);
-        currencyConverter.addExchangeRate(KRW, USD, 0.00073);
-
-        testee.add(dollars(dollar));
-        testee.add(euros(euro));
-        testee.add(southKoreanWons(southKoreanWon));
-
-        assertThat(testee.sumCurrency(expectedCurrency)).
-                isEqualTo(new Money(expectedTotalAmmount, expectedCurrency));
-    }
-
-    @Test
-    void amountWhenPortfolioEmptyThenReturnZero() {
-        assertThat(testee.sumCurrency(Currency.USD))
-                .isEqualTo(dollars(0.0));
-    }
-
-    @Test
-    void amountWhenPortfolioContains1UsdThenReturn1Usd() {
-        testee.add(dollars(1.0));
-
-        assertThat(testee.sumCurrency(USD))
-                .isEqualTo(new Money(1.0, USD));
-    }
-
     @Disabled
     @Test
         // TODO: Fix this test
     void evaluateAPortfolioShouldReturnMissingExchangeRatesExceptionWhenMultipleRatesMissing() {
-        var portfolio = new Portfolio(CurrencyConverter.withExchangeRate(KRW, USD, 1));
+        final var portfolio = new Portfolio(CurrencyConverter.withExchangeRate(KRW, USD, 1));
         portfolio.add(southKoreanWons(1100));
         portfolio.add(dollars(1));
 
