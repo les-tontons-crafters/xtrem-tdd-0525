@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class PortfolioTest {
-    private static CurrencyConverter currencyConverter = CurrencyConverter.withExchangeRate(USD, EUR, 0.83);
+    private static CurrencyConverter currencyConverter;
     private Portfolio testee;
 
     @BeforeAll
