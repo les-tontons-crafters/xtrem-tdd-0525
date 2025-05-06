@@ -25,9 +25,17 @@ public final class CurrencyConverter {
             }
 
             return findExchangeRate(position.currency(), currency)
-                    .map(test -> new Position(position.amount() * test.rate(), currency))
+                    .map(exchangeRate -> applyExchangeRateToPosition(position, currency, exchangeRate))
                     .map(ConversionResult::new)
-                    .orElse(new ConversionResult(new MissingExchangeRateException(position.currency(), currency)));
+                    .orElse(createFailureWithMissingExchangeRate(position, currency));
+    }
+
+    private static ConversionResult createFailureWithMissingExchangeRate(Position position, Currency currency) {
+        return new ConversionResult(new MissingExchangeRateException(position.currency(), currency));
+    }
+
+    private static Position applyExchangeRateToPosition(Position position, Currency currency, ExchangeRate test) {
+        return new Position(position.amount() * test.rate(), currency);
     }
 
     private Optional<ExchangeRate> findExchangeRate(Currency from, Currency to) {
