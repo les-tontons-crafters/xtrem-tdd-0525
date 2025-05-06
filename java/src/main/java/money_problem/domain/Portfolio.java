@@ -18,14 +18,34 @@ public class Portfolio {
     }
 
     public Result<Money, ConversionError> amount(Currency currency) {
-        List<Result<Money, ConversionError>> result = moneyList.stream()
+        List<Result<Money, ConversionError>> result = convert(currency);
+        if (containsFailure(result)) {
+            return createFailure(result);
+        }
+        return createSuccess(currency, result);
+    }
+
+    private List<Result<Money, ConversionError>> convert(Currency currency) {
+        return moneyList.stream()
                 .map(money -> moneyConversionResult(money, currency))
                 .toList();
-        if (result.stream().anyMatch(Result::isFailure)) {
-            return new Result<>(new ConversionError(result.stream().flatMap(r -> r.conversionErrors().stream()).toList()));
-        }
+    }
+
+    private Result<Money, ConversionError> createSuccess(Currency currency, List<Result<Money, ConversionError>> result) {
         return new Result<>(new Money(result.stream()
                 .mapToDouble(r -> r.success().amount()).sum(), currency));
+    }
+
+    private Result<Money, ConversionError> createFailure(List<Result<Money, ConversionError>> result) {
+        List<String> conversionErrors = result.stream()
+                .flatMap(r -> r.conversionErrors().stream())
+                .toList();
+        ConversionError conversionError = new ConversionError(conversionErrors);
+        return new Result<>(conversionError);
+    }
+
+    private boolean containsFailure(List<Result<Money, ConversionError>> result) {
+        return result.stream().anyMatch(Result::isFailure);
     }
 
     private Result<Money, ConversionError> moneyConversionResult(Money money, Currency to) {
