@@ -18,20 +18,8 @@ public final class CurrencyConverter {
         exchangeRatesNew.add(exchangeRate);
     }
 
-    // Expectation: public Result<Position, ExchangeRate> getTotal(Currency targetCurrency)
-    public ConversionResult convert(Position position, Currency targetCurrency) {
-        if (position.isTargetCurrency(targetCurrency)) {
-            return new ConversionResult(position);
-        }
-
-        return findExchangeRate(position.currency(), targetCurrency)
-                .map(exchangeRate -> applyExchangeRateToPosition(position, targetCurrency, exchangeRate))
-                .map(ConversionResult::new)
-                .orElse(createFailureWithMissingExchangeRate(position, targetCurrency));
-    }
-
-    private static ConversionResult createFailureWithMissingExchangeRate(Position position, Currency currency) {
-        return new ConversionResult(new MissingExchangeRateException(position.currency(), currency));
+    private static ExchangeRate createFailureWithMissingExchangeRate(Position position, Currency currency) {
+        return new ExchangeRate(position.currency(), currency, 0);
     }
 
     private static Position applyExchangeRateToPosition(Position position, Currency currency, ExchangeRate test) {
@@ -42,11 +30,13 @@ public final class CurrencyConverter {
         return exchangeRatesNew.stream().filter(exchangeRate -> exchangeRate.from().equals(from) && exchangeRate.to().equals(to)).findFirst();
     }
 
-    public Result<Position, ExchangeRate> convertNew(Position position, Currency currency) {
-        ConversionResult conversionResult = convert(position, currency);
-        if (conversionResult.isFailure()) {
-            return Result.fromFailure(new ExchangeRate(position.currency(), currency, 0));
+    public Result<Position, ExchangeRate> convert(Position position, Currency targetCurrency) {
+        if (position.isTargetCurrency(targetCurrency)) {
+            return Result.fromSuccess(position);
         }
-        return Result.fromSuccess(conversionResult.success());
+        return findExchangeRate(position.currency(), targetCurrency)
+                .map(exchangeRate -> applyExchangeRateToPosition(position, targetCurrency, exchangeRate))
+                .map(Result::<Position, ExchangeRate>fromSuccess)
+                .orElse(Result.fromFailure(createFailureWithMissingExchangeRate(position, targetCurrency)));
     }
 }

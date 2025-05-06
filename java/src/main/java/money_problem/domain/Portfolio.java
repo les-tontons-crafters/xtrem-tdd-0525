@@ -23,7 +23,7 @@ public class Portfolio {
             List<String> errorMessages = new ArrayList<>();
             for (Position position : positions) {
                 try {
-                    var converted = currencyConverter.convertNew(new Position(position.amount(), position.currency()), targetCurrency);
+                    var converted = currencyConverter.convert(new Position(position.amount(), position.currency()), targetCurrency);
                     if(converted.isFailure()){
                         throw new MissingExchangeRateException(converted.failure().from(),converted.failure().to());
                     }
