@@ -38,7 +38,7 @@ class CurrencyConverterTest {
         assertThat(currencyConverter.convert(new Position(10, EUR), USD))
                 .isEqualTo(12);
 
-        currencyConverter.addExchangeRate(EUR, USD, 1.3);
+        currencyConverter.addExchangeRate(new ExchangeRate(EUR, USD, 1.3));
 
         assertThat(currencyConverter.convert(new Position(10, EUR), USD))
                 .isEqualTo(13);

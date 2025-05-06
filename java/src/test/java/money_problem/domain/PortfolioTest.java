@@ -17,8 +17,8 @@ class PortfolioTest {
 	@BeforeAll
 	static void setup() {
 		currencyConverter = CurrencyConverter.withExchangeRate(new ExchangeRate(USD, EUR, 1.0 / 1.2));
-		currencyConverter.addExchangeRate(EUR, USD, 1.2);
-		currencyConverter.addExchangeRate(USD, KRW, 1100);
+		currencyConverter.addExchangeRate(new ExchangeRate(EUR, USD, 1.2));
+		currencyConverter.addExchangeRate(new ExchangeRate(USD, KRW, 1100));
 	}
 
 	@BeforeEach

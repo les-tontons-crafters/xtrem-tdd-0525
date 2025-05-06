@@ -12,13 +12,13 @@ public final class CurrencyConverter {
 
     public static CurrencyConverter withExchangeRate(ExchangeRate exchangeRate) {
         var bank = new CurrencyConverter(new HashMap<>());
-        bank.addExchangeRate(exchangeRate.from(), exchangeRate.to(), exchangeRate.rate());
+        bank.addExchangeRate(new ExchangeRate(exchangeRate.from(), exchangeRate.to(), exchangeRate.rate()));
 
         return bank;
     }
 
-    public void addExchangeRate(Currency from, Currency to, double rate) {
-        exchangeRates.put(keyFor(from, to), rate);
+    public void addExchangeRate(ExchangeRate exchangeRate) {
+        exchangeRates.put(keyFor(exchangeRate.from(), exchangeRate.to()), exchangeRate.rate());
     }
 
     private static String keyFor(Currency from, Currency to) {
