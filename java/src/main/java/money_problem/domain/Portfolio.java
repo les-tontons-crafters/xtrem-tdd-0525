@@ -9,22 +9,22 @@ public class Portfolio {
 
     private final CurrencyConverter currencyConverter;
 
-    public Portfolio(CurrencyConverter currencyConverter) {
+    public Portfolio(final CurrencyConverter currencyConverter) {
         this.currencyConverter = currencyConverter;
     }
 
-    public void add(Money money) {
+    public void add(final Money money) {
         moneyList.add(money);
     }
 
-    public Money amount(Currency currency) throws MissingExchangeRatesException {
+    public Money amount(final Currency currency) throws MissingExchangeRatesException {
         var totalPortfolioValue = 0.0;
-        List<String> missingExchangeRates = new ArrayList<>();
-        for (Money money : moneyList) {
+        final List<String> missingExchangeRates = new ArrayList<>();
+        for (final Money money : moneyList) {
             try {
                 totalPortfolioValue += currencyConverter.convert(new Money(money.amount(), money.currency()), currency);
 
-            } catch (MissingExchangeRateException e) {
+            } catch (final MissingExchangeRateException e) {
                 missingExchangeRates.add(e.getMessage());
 
             }
@@ -35,11 +35,11 @@ public class Portfolio {
         return new Money(totalPortfolioValue, currency);
     }
 
-    public Result<Money, ConversionError> amountNew(Currency currency) {
+    public Result<Money, ConversionError> amountNew(final Currency currency) {
 	    try {
 		    return new Result<>(amount(currency));
-	    } catch (MissingExchangeRatesException e) {
-            return new Result<>(new ConversionError("wayne"));
+        } catch (final MissingExchangeRatesException e) {
+            return new Result<>(new ConversionError(e.getMessage()));
 	    }
     }
 

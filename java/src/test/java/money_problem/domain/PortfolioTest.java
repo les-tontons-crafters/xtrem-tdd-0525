@@ -81,7 +81,7 @@ class PortfolioTest {
     @CsvSource({
             "1.0, 0.0, 0.0, 1.0"
     })
-    void addAmount(double dollar, double euro, double southKoreanWon, double expectedTotalAmount) throws MissingExchangeRatesException {
+    void addAmount(final double dollar, final double euro, final double southKoreanWon, final double expectedTotalAmount) throws MissingExchangeRatesException {
         currencyConverter.addExchangeRate(EUR, USD, 1.2);
         currencyConverter.addExchangeRate(KRW, USD, 0.00073);
 
@@ -95,7 +95,7 @@ class PortfolioTest {
 
     @Test
     void evaluateAPortfolioShouldReturnMissingExchangeRatesExceptionWhenMultipleRatesMissing() {
-        var portfolio = new Portfolio(CurrencyConverter.withExchangeRate(KRW, USD, 1));
+        final var portfolio = new Portfolio(CurrencyConverter.withExchangeRate(KRW, USD, 1));
         portfolio.add(southKoreanWons(1100));
         portfolio.add(dollars(1));
 
@@ -106,23 +106,24 @@ class PortfolioTest {
 
     @Test
     void conversionError() {
-        Portfolio testee = new Portfolio(currencyConverter);
+        final Portfolio testee = new Portfolio(currencyConverter);
         testee.add(new Money(10, USD));
-        
-        Result<Money, ConversionError> actual = testee.amountNew(KRW);
+        testee.add(new Money(10, EUR));
 
-        Result<Money, ConversionError> expected = new Result<>(new ConversionError("wayne"));
+        final Result<Money, ConversionError> actual = testee.amountNew(KRW);
+
+        final Result<Money, ConversionError> expected = new Result<>(new ConversionError("USD->KRW,EUR->KRW"));
         assertThat(actual).isEqualTo(expected);
     }
 
     @Test
     void successStory() {
-        Portfolio testee = new Portfolio(currencyConverter);
+        final Portfolio testee = new Portfolio(currencyConverter);
         testee.add(dollars(100));
 
-        Result<Money, ConversionError> actual = testee.amountNew(EUR);
+        final Result<Money, ConversionError> actual = testee.amountNew(EUR);
 
-        Result<Money, ConversionError> expected = new Result<>(euros(83.0));
+        final Result<Money, ConversionError> expected = new Result<>(euros(83.0));
         assertThat(actual).isEqualTo(expected);
     }
 }
