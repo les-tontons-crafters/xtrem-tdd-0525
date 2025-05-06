@@ -29,51 +29,63 @@ class PortfolioTest {
     }
 
     @Test
-    void add5UsdAnd5UsdThenReturn10Usd() throws MissingExchangeRatesException {
+    void add5UsdAnd5UsdThenReturn10Usd() {
         testee.add(dollars(5));
         testee.add(dollars(5));
 
-        assertThat(testee.amount(USD).amount())
+        Result<Money, ConversionError> moneyConversionErrorResult = testee.amount(USD);
+
+        assertThat(moneyConversionErrorResult.success().amount())
                 .isEqualTo(10);
     }
 
     @Test
-    void add5UsdAnd10EurThenReturn17Usd() throws MissingExchangeRatesException {
+    void add5UsdAnd10EurThenReturn17Usd() {
         currencyConverter.addExchangeRate(EUR, USD, 1.2);
         testee.add(dollars(5));
         testee.add(euros(10));
 
-        assertThat(testee.amount(USD))
+        Result<Money, ConversionError> moneyConversionErrorResult = testee.amount(USD);
+
+        assertThat(moneyConversionErrorResult.success())
                 .isEqualTo(new Money(17, USD));
     }
 
     @Test
-    void whenCreatingEmptyPortfolioThenReturnZero() throws MissingExchangeRatesException {
-        assertThat(testee.amount(USD).amount())
+    void whenCreatingEmptyPortfolioThenReturnZero() {
+        Result<Money, ConversionError> moneyConversionErrorResult = testee.amount(USD);
+
+        assertThat(moneyConversionErrorResult.success().amount())
                 .isZero();
     }
 
     @Test
-    void addParticularAmountInUsdWhenPortfolioEmptyThenReturnExpectedAmount() throws MissingExchangeRatesException {
+    void addParticularAmountInUsdWhenPortfolioEmptyThenReturnExpectedAmount() {
         testee.add(dollars(1.0));
 
-        assertThat(testee.amount(USD).amount())
+        Result<Money, ConversionError> moneyConversionErrorResult = testee.amount(USD);
+
+        assertThat(moneyConversionErrorResult.success().amount())
                 .isEqualTo(1.0);
     }
 
     @Test
-    void addParticularAmountInUsdWhenPortfolioIsEmptyThenReturnExpectedAmountInEur() throws MissingExchangeRatesException {
+    void addParticularAmountInUsdWhenPortfolioIsEmptyThenReturnExpectedAmountInEur() {
         testee.add(dollars(1.0));
 
-        assertThat(testee.amount(EUR).amount())
+        Result<Money, ConversionError> moneyConversionErrorResult = testee.amount(EUR);
+
+        assertThat(moneyConversionErrorResult.success().amount())
                 .isCloseTo(0.83, Offset.offset(0.01));
     }
 
     @Test
-    void addADifferentAmountInUsdWhenPortfolioIsEmptyThenReturnExpectedAmountInEur() throws MissingExchangeRatesException {
+    void addADifferentAmountInUsdWhenPortfolioIsEmptyThenReturnExpectedAmountInEur() {
         testee.add(dollars(2.0));
 
-        assertThat(testee.amount(EUR).amount())
+        Result<Money, ConversionError> moneyConversionErrorResult = testee.amount(EUR);
+
+        assertThat(moneyConversionErrorResult.success().amount())
                 .isCloseTo(1.66, Offset.offset(0.01));
     }
 
@@ -81,7 +93,7 @@ class PortfolioTest {
     @CsvSource({
             "1.0, 0.0, 0.0, 1.0"
     })
-    void addAmount(final double dollar, final double euro, final double southKoreanWon, final double expectedTotalAmount) throws MissingExchangeRatesException {
+    void addAmount(final double dollar, final double euro, final double southKoreanWon, final double expectedTotalAmount)  {
         currencyConverter.addExchangeRate(EUR, USD, 1.2);
         currencyConverter.addExchangeRate(KRW, USD, 0.00073);
 
@@ -89,7 +101,9 @@ class PortfolioTest {
         testee.add(euros(euro));
         testee.add(southKoreanWons(southKoreanWon));
 
-        assertThat(testee.amount(USD).amount())
+        Result<Money, ConversionError> moneyConversionErrorResult = testee.amount(USD);
+
+        assertThat(moneyConversionErrorResult.success().amount())
                 .isCloseTo(expectedTotalAmount, Offset.offset(0.01));
     }
 
@@ -99,7 +113,12 @@ class PortfolioTest {
         portfolio.add(southKoreanWons(1100));
         portfolio.add(dollars(1));
 
-        assertThatThrownBy(() -> portfolio.amount(EUR))
+        assertThatThrownBy(() -> {
+            Result<Money, ConversionError> moneyConversionErrorResult = portfolio.amount(EUR);
+            if (moneyConversionErrorResult.isFailure()) {
+                throw new MissingExchangeRatesException(moneyConversionErrorResult.conversionErrors());
+            }
+        })
                 .isInstanceOf(MissingExchangeRatesException.class)
                 .hasMessage("KRW->EUR,USD->EUR");
     }
@@ -110,7 +129,7 @@ class PortfolioTest {
         testee.add(new Money(10, USD));
         testee.add(new Money(10, EUR));
 
-        final Result<Money, ConversionError> actual = testee.amountNew(KRW);
+        final Result<Money, ConversionError> actual = testee.amount(KRW);
 
         final Result<Money, ConversionError> expected = new Result<>(new ConversionError("USD->KRW,EUR->KRW"));
         assertThat(actual).isEqualTo(expected);
@@ -121,7 +140,7 @@ class PortfolioTest {
         final Portfolio testee = new Portfolio(currencyConverter);
         testee.add(dollars(100));
 
-        final Result<Money, ConversionError> actual = testee.amountNew(EUR);
+        final Result<Money, ConversionError> actual = testee.amount(EUR);
 
         final Result<Money, ConversionError> expected = new Result<>(euros(83.0));
         assertThat(actual).isEqualTo(expected);

@@ -17,15 +17,7 @@ public class Portfolio {
         moneyList.add(money);
     }
 
-    public Money amount(final Currency currency) throws MissingExchangeRatesException {
-        Result<Money, ConversionError> moneyConversionErrorResult = amountNew(currency);
-        if (moneyConversionErrorResult.isFailure()) {
-            throw new MissingExchangeRatesException(moneyConversionErrorResult.conversionErrors());
-        }
-        return moneyConversionErrorResult.success();
-    }
-
-    public Result<Money, ConversionError> amountNew(final Currency currency) {
+    public Result<Money, ConversionError> amount(final Currency currency) {
         try {
             var totalPortfolioValue = 0.0;
             final List<String> missingExchangeRates = new ArrayList<>();
