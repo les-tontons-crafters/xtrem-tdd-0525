@@ -19,25 +19,19 @@ public final class CurrencyConverter {
     }
     
     public ConversionResult convert(Position position, Currency currency) {
-            if (!canConvert(position.currency(), currency)) {
-                return new ConversionResult(new MissingExchangeRateException(position.currency(), currency));
+            if ( position.currency() == currency)
+            {
+                return new ConversionResult(position);
             }
-           return new ConversionResult(new Position(convertSafely(position, currency), currency));
-        
-        
-    }
 
-    private double convertSafely(Position position, Currency to) {
-        return position.currency() == to
-                ? position.amount()
-                : position.amount() * findExchangeRate(position.currency(), to).orElseThrow().rate();
+            return findExchangeRate(position.currency(), currency)
+                    .map(test -> new Position(position.amount() * test.rate(), currency))
+                    .map(ConversionResult::new)
+                    .orElse(new ConversionResult(new MissingExchangeRateException(position.currency(), currency)));
     }
 
     private Optional<ExchangeRate> findExchangeRate(Currency from, Currency to) {
         return exchangeRatesNew.stream().filter(exchangeRate -> exchangeRate.from().equals(from) && exchangeRate.to().equals(to)).findFirst();
     }
 
-    private boolean canConvert(Currency from, Currency to) {
-        return from == to || exchangeRatesNew.stream().anyMatch(exchangeRate -> exchangeRate.from().equals(from) && exchangeRate.to().equals(to));
-    }
 }
