@@ -18,16 +18,16 @@ public class Portfolio {
     }
 
     public Result<Money, ConversionError> amount(final Currency currency) {
-
         var totalPortfolioValue = 0.0;
         final List<String> missingExchangeRates = new ArrayList<>();
+        List<Result<Money, ConversionError>> result = new ArrayList<>();
         for (final Money money : moneyList) {
             try {
                 totalPortfolioValue += currencyConverter.convert(new Money(money.amount(), money.currency()), currency);
-
+                result.add(new Result<>(new Money(totalPortfolioValue, currency)));
             } catch (final MissingExchangeRateException e) {
                 missingExchangeRates.add(e.getMessage());
-
+                result.add(new Result<>(new ConversionError(List.of(e.getMessage()))));
             }
         }
         if (!missingExchangeRates.isEmpty()) {
