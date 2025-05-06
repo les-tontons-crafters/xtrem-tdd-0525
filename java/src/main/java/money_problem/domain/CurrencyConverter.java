@@ -17,17 +17,16 @@ public final class CurrencyConverter {
         exchangeRate1.ifPresent(exchangeRatesNew::remove);
         exchangeRatesNew.add(exchangeRate);
     }
-    
-    public ConversionResult convert(Position position, Currency currency) {
-            if ( position.currency() == currency)
-            {
-                return new ConversionResult(position);
-            }
 
-            return findExchangeRate(position.currency(), currency)
-                    .map(exchangeRate -> applyExchangeRateToPosition(position, currency, exchangeRate))
-                    .map(ConversionResult::new)
-                    .orElse(createFailureWithMissingExchangeRate(position, currency));
+    public ConversionResult convert(Position position, Currency currency) {
+        if (position.currency() == currency) {
+            return new ConversionResult(position);
+        }
+
+        return findExchangeRate(position.currency(), currency)
+                .map(exchangeRate -> applyExchangeRateToPosition(position, currency, exchangeRate))
+                .map(ConversionResult::new)
+                .orElse(createFailureWithMissingExchangeRate(position, currency));
     }
 
     private static ConversionResult createFailureWithMissingExchangeRate(Position position, Currency currency) {
