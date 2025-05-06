@@ -2,12 +2,16 @@ package money_problem.domain;
 
 import java.util.Objects;
 
-public class Result<Sucess, Error> {
+public class Result<S extends Money, F extends ConversionError> {
 
-    private final String foo;
+    private F conversionError;
 
-    public Result(String foo) {
-        this.foo = foo;
+    public Result(F conversionError) {
+        this.conversionError = conversionError;
+    }
+
+    public Result(S conversionError) {
+
     }
 
     @Override
@@ -16,12 +20,12 @@ public class Result<Sucess, Error> {
             return false;
         }
         Result<?, ?> result = (Result<?, ?>) o;
-        return Objects.equals(foo, result.foo);
+        return Objects.equals(conversionError, result.conversionError);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(foo);
+        return Objects.hashCode(conversionError);
     }
 
 }

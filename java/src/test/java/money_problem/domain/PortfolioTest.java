@@ -105,9 +105,23 @@ class PortfolioTest {
     }
 
     @Test
-    void foo() {
+    void conversionError() {
         Portfolio testee = new Portfolio(currencyConverter);
-        assertThat(testee.amountNew(KRW)).isEqualTo(new Result<Money, ConversionError>("wayne"));
+
+        Result<Money, ConversionError> actual = testee.amountNew(KRW);
+
+        Result<Money, ConversionError> expected = new ConversionError("wayne");
+        assertThat(actual).isEqualTo(expected);
     }
 
+    @Test
+    void successStory() {
+        Portfolio testee = new Portfolio(currencyConverter);
+        testee.add(dollars(100));
+
+        Result<Money, ConversionError> actual = testee.amountNew(EUR);
+
+        Result<Money, ConversionError> expected = new Result<>(euros(83.0));
+        assertThat(actual).isEqualTo(expected);
+    }
 }
