@@ -16,29 +16,26 @@ public class Portfolio {
         positions.add(position);
     }
 
-    public Position getTotal(Currency targetCurrency) throws Exception {
-        double sum = 0;
-        List<String> errorMessages = new ArrayList<>();
-        for (Position position : positions) {
-            try {
-                var converted = currencyConverter.convert(new Position(position.amount(), position.currency()), targetCurrency);
-                if(converted.isFailure()){
-                    throw converted.failure();
-                }
-                sum += converted.success().amount();
-            } catch (MissingExchangeRateException e) {
-                errorMessages.add(e.getMessage());
-            }
-        }
-        if (!errorMessages.isEmpty()) {
-            throw new MissingExchangeRatesException(errorMessages);
-        }
-        return new Position(sum, targetCurrency);
-    }
-
-    public ConversionResult getTotalNew(Currency currency) {
+    public ConversionResult getTotal(Currency targetCurrency) {
         try {
-            return new ConversionResult(getTotal(currency));
+            double sum = 0;
+            List<String> errorMessages = new ArrayList<>();
+            for (Position position : positions) {
+                try {
+                    var converted = currencyConverter.convert(new Position(position.amount(), position.currency()), targetCurrency);
+                    if(converted.isFailure()){
+                        throw converted.failure();
+                    }
+                    sum += converted.success().amount();
+                } catch (MissingExchangeRateException e) {
+                    errorMessages.add(e.getMessage());
+                }
+            }
+            if (!errorMessages.isEmpty()) {
+                throw new MissingExchangeRatesException(errorMessages);
+            }
+
+            return new ConversionResult(new Position(sum, targetCurrency));
         } catch (Exception e) {
             return new ConversionResult(e);
         }
