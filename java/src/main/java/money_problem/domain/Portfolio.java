@@ -20,7 +20,7 @@ public class Portfolio {
     public Money amount(Currency currency) throws MissingExchangeRateException {
         var totalPortfolioValue = 0.0;
         for (Money money : moneyList) {
-            totalPortfolioValue += currencyConverter.convert(money.amount(), money.currency(), currency);
+            totalPortfolioValue += currencyConverter.convert(new Money(money.amount(), money.currency()), currency);
         }
         return new Money(totalPortfolioValue, currency);
     }

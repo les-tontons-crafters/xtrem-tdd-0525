@@ -17,25 +17,25 @@ public final class CurrencyConverter {
         return bank;
     }
 
-    public void addExchangeRate(final Currency from, final Currency to, final double rate) {
-        exchangeRates.put(keyFor(from, to), rate);
-    }
-
     private static String keyFor(final Currency from, final Currency to) {
         return from + "->" + to;
     }
 
-    public double convert(final double amount, final Currency from, final Currency to) throws MissingExchangeRateException {
-        if (!canConvert(from, to)) {
-            throw new MissingExchangeRateException(from, to);
-        }
-        return convertSafely(amount, from, to);
+    public void addExchangeRate(final Currency from, final Currency to, final double rate) {
+        exchangeRates.put(keyFor(from, to), rate);
     }
 
-    private double convertSafely(final double amount, final Currency from, final Currency to) {
-        return from == to
-                ? amount
-                : amount * exchangeRates.get(keyFor(from, to));
+    public double convert(Money money, final Currency to) throws MissingExchangeRateException {
+        if (!canConvert(money.currency(), to)) {
+            throw new MissingExchangeRateException(money.currency(), to);
+        }
+        return convertSafely(new Money(money.amount(), money.currency()), to);
+    }
+
+    private double convertSafely(Money money, final Currency to) {
+        return money.currency() == to
+                ? money.amount()
+                : money.amount() * exchangeRates.get(keyFor(money.currency(), to));
     }
 
     private boolean canConvert(final Currency from, final Currency to) {
