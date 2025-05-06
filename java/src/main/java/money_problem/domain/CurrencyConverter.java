@@ -26,7 +26,7 @@ public final class CurrencyConverter {
     }
 
     public double convert(Money money, final Currency to) throws MissingExchangeRateException {
-        if (!canConvert(money.currency(), to)) {
+        if (isNotConvertable(money.currency(), to)) {
             throw new MissingExchangeRateException(money.currency(), to);
         }
         return convertSafely(money, to);
@@ -38,7 +38,7 @@ public final class CurrencyConverter {
                 : money.amount() * exchangeRates.get(keyFor(money.currency(), to));
     }
 
-    private boolean canConvert(final Currency from, final Currency to) {
-        return from == to || exchangeRates.containsKey(keyFor(from, to));
+    private boolean isNotConvertable(final Currency from, final Currency to) {
+        return !(from == to || exchangeRates.containsKey(keyFor(from, to)));
     }
 }
