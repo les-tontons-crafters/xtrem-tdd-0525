@@ -29,7 +29,7 @@ class PortfolioTest {
 	@DisplayName("1.2 USD = 1 EUR")
 	void getTotalInEur() {
 		portfolio.add(new Position(1.2, Currency.USD));
-		assertThat(portfolio.getTotalNew(EUR)).isEqualTo(new ConversionResult(new Position(1, EUR)));
+		assertThat(portfolio.getTotal(EUR)).isEqualTo(new ConversionResult(new Position(1, EUR)));
 	}
 
 	@Test
@@ -37,7 +37,7 @@ class PortfolioTest {
 	void getTotalInUsd() throws MissingExchangeRatesException {
 		portfolio.add(new Position(10, Currency.EUR));
 		portfolio.add(new Position(5, Currency.USD));
-		assertThat(portfolio.getTotalNew(USD)).isEqualTo(new ConversionResult(new Position(17.0, USD)));
+		assertThat(portfolio.getTotal(USD)).isEqualTo(new ConversionResult(new Position(17.0, USD)));
 	}
 
 	@Test
@@ -45,7 +45,7 @@ class PortfolioTest {
 	void getTotalInKrw() throws MissingExchangeRatesException {
 		portfolio.add(new Position(1100, KRW));
 		portfolio.add(new Position(1, Currency.USD));
-		assertThat(portfolio.getTotalNew(KRW)).isEqualTo(new ConversionResult(new Position(2200.0, KRW)));
+		assertThat(portfolio.getTotal(KRW)).isEqualTo(new ConversionResult(new Position(2200.0, KRW)));
 	}
 
 	@Test
@@ -53,7 +53,7 @@ class PortfolioTest {
 		var portfolio = new Portfolio(CurrencyConverter.withExchangeRate(new ExchangeRate(KRW, USD, 1)));
 		portfolio.add(new Position(1100, KRW));
 		portfolio.add(new Position(1, Currency.USD));
-		assertThat(portfolio.getTotalNew(EUR).failure().getMessage())
+		assertThat(portfolio.getTotal(EUR).failure().getMessage())
 				.isEqualTo("KRW->EUR,USD->EUR");
 	}
 
@@ -61,7 +61,7 @@ class PortfolioTest {
 	void getTotalShouldReturnMissingExchangeRatesExceptionWhenSingleRateMissing() {
 		var portfolio = new Portfolio(CurrencyConverter.withExchangeRate(new ExchangeRate(KRW, USD, 1)));
 		portfolio.add(new Position(1100, KRW));
-		assertThat(portfolio.getTotalNew(EUR).failure().getMessage())
+		assertThat(portfolio.getTotal(EUR).failure().getMessage())
 				.isEqualTo("KRW->EUR");
 	}
 }
