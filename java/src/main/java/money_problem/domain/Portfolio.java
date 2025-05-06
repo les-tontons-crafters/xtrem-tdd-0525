@@ -33,4 +33,8 @@ public class Portfolio {
         }
         return sum;
     }
+
+    public Position getTotalNew(Currency targetCurrency) throws MissingExchangeRatesException {
+        return new Position(getTotal(targetCurrency), targetCurrency);
+    }
 }
