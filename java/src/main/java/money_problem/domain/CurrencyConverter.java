@@ -29,7 +29,7 @@ public final class CurrencyConverter {
         if (!canConvert(money.currency(), to)) {
             throw new MissingExchangeRateException(money.currency(), to);
         }
-        return convertSafely(new Money(money.amount(), money.currency()), to);
+        return convertSafely(money, to);
     }
 
     private double convertSafely(Money money, final Currency to) {
