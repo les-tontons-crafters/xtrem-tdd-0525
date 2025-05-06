@@ -16,29 +16,20 @@ public class Portfolio {
         positions.add(position);
     }
 
-    // Expectation: public Result<Position, List<ExchangeRate>> getTotal(Currency targetCurrency)
-    public ConversionResult getTotal(Currency targetCurrency) {
-        try {
-            double sum = 0;
-            List<String> errorMessages = new ArrayList<>();
-            for (Position position : positions) {
-                try {
-                    var converted = currencyConverter.convert(new Position(position.amount(), position.currency()), targetCurrency);
-                    if(converted.isFailure()){
-                        throw new MissingExchangeRateException(converted.failure().from(),converted.failure().to());
-                    }
-                    sum += converted.success().amount();
-                } catch (MissingExchangeRateException e) {
-                    errorMessages.add(e.getMessage());
-                }
+    public Result<Position, List<ExchangeRate>> getTotal(Currency targetCurrency) {
+        double sum = 0;
+        List<ExchangeRate> missingExchangeRates = new ArrayList<>();
+        for (Position position : positions) {
+            var converted = currencyConverter.convert(new Position(position.amount(), position.currency()), targetCurrency);
+            if (converted.isFailure()) {
+                missingExchangeRates.add(converted.failure());
+            } else {
+                sum += converted.success().amount();
             }
-            if (!errorMessages.isEmpty()) {
-                throw new MissingExchangeRatesException(errorMessages);
-            }
-
-            return new ConversionResult(new Position(sum, targetCurrency));
-        } catch (Exception e) {
-            return new ConversionResult(e);
         }
+        if (!missingExchangeRates.isEmpty()) {
+            return Result.fromFailure(missingExchangeRates);
+        }
+        return Result.fromSuccess(new Position(sum, targetCurrency));
     }
 }
