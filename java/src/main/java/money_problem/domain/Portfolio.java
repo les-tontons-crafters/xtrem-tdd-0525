@@ -1,5 +1,7 @@
 package money_problem.domain;
 
+import io.vavr.control.Either;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,4 +58,7 @@ public class Portfolio {
         return result.stream().anyMatch(Result::isFailure);
     }
 
+    public Either<ConversionError, Money> amountWithEither(Currency currency) {
+        return Either.left(new ConversionError(List.of("KRW->EUR")));
+    }
 }

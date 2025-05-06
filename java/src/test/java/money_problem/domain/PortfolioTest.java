@@ -1,6 +1,7 @@
 package money_problem.domain;
 
 import org.assertj.core.data.Offset;
+import org.assertj.vavr.api.VavrAssertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -146,5 +147,15 @@ class PortfolioTest {
 
         final Result<Money, ConversionError> expected = new Result<>(euros(83.0));
         assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void failureStoryWithVavr() {
+        testee.add(southKoreanWons(100));
+
+        var result = testee.amountWithEither(EUR);
+
+        VavrAssertions.assertThat(result)
+                .containsOnLeft(new ConversionError(List.of("KRW->EUR")));
     }
 }
