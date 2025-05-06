@@ -31,9 +31,12 @@ public class Portfolio {
                 .toList();
     }
 
-    private Result<Money, ConversionError> createSuccess(Currency currency, List<Result<Money, ConversionError>> result) {
-        return new Result<>(new Money(result.stream()
-                .mapToDouble(r -> r.success().amount()).sum(), currency));
+    private Result<Money, ConversionError> moneyConversionResult(Money money, Currency to) {
+        try {
+            return new Result<>(new Money(currencyConverter.convert(money, to), to));
+        } catch (MissingExchangeRateException e) {
+            return new Result<>(new ConversionError(List.of(e.getMessage())));
+        }
     }
 
     private Result<Money, ConversionError> createFailure(List<Result<Money, ConversionError>> result) {
@@ -44,16 +47,13 @@ public class Portfolio {
         return new Result<>(conversionError);
     }
 
-    private boolean containsFailure(List<Result<Money, ConversionError>> result) {
-        return result.stream().anyMatch(Result::isFailure);
+    private Result<Money, ConversionError> createSuccess(Currency currency, List<Result<Money, ConversionError>> result) {
+        return new Result<>(new Money(result.stream()
+                .mapToDouble(r -> r.success().amount()).sum(), currency));
     }
 
-    private Result<Money, ConversionError> moneyConversionResult(Money money, Currency to) {
-        try {
-            return new Result<>(new Money(currencyConverter.convert(money, to), to));
-        } catch (MissingExchangeRateException e) {
-            return new Result<>(new ConversionError(List.of(e.getMessage())));
-        }
+    private boolean containsFailure(List<Result<Money, ConversionError>> result) {
+        return result.stream().anyMatch(Result::isFailure);
     }
 
 }
