@@ -18,23 +18,24 @@ public class Portfolio {
     }
 
     public Result<Money, ConversionError> amount(final Currency currency) {
-        var totalPortfolioValue = 0.0;
-        final List<String> missingExchangeRates = new ArrayList<>();
-        List<Result<Money, ConversionError>> result = new ArrayList<>();
-        for (final Money money : moneyList) {
-            try {
-                totalPortfolioValue += currencyConverter.convert(new Money(money.amount(), money.currency()), currency);
-                result.add(new Result<>(new Money(totalPortfolioValue, currency)));
-            } catch (final MissingExchangeRateException e) {
-                missingExchangeRates.add(e.getMessage());
-                result.add(new Result<>(new ConversionError(List.of(e.getMessage()))));
-            }
-        }
-        if (!missingExchangeRates.isEmpty()) {
-            return new Result<>(new ConversionError(missingExchangeRates));
-        }
-        return new Result<>(new Money(totalPortfolioValue, currency));
+        final List<Result<Money, ConversionError>> result = moneyList.stream().map(money -> moneyConversionErrorResult(currency, money)).toList();
 
+        if (result.stream().anyMatch(Result::isFailure)) {
+            return new Result<>(new ConversionError(result.stream().flatMap(r -> r.conversionErrors().stream()).toList()));
+        }
+        return new Result<>(new Money(result.stream()
+                .mapToDouble(r -> r.success().amount()).sum(), currency));
+    }
+
+    private Result<Money, ConversionError> moneyConversionErrorResult(Currency currency, Money money) {
+        Result<Money, ConversionError> tempResult;
+        try {
+            tempResult = new Result<>(new Money(currencyConverter.convert(new Money(money.amount(), money.currency()), currency), currency));
+
+        } catch (final MissingExchangeRateException e) {
+            tempResult = new Result<>(new ConversionError(List.of(e.getMessage())));
+        }
+        return tempResult;
     }
 
 }
