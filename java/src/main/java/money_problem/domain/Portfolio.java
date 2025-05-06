@@ -44,9 +44,11 @@ public class Portfolio {
     }
 
     public Money amountWithMoney(Currency currency) throws MissingExchangeRateException {
+        // TODO : implement with a basic for loop for now
         var doubleStream = moneyList.stream()
                 .map(m -> {
                     try {
+                        // TODO : use Money as well in the convert method
                         return currencyConverter.convert(m.amount(), m.currency(), currency);
                     } catch (MissingExchangeRateException e) {
                         throw new RuntimeException(e);
