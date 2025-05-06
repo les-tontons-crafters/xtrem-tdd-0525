@@ -7,7 +7,7 @@ import static money_problem.domain.Currency.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class BankTest {
+class CurrencyConverterTest {
     private final CurrencyConverter currencyConverter = CurrencyConverter.withExchangeRate(EUR, USD, 1.2);
 
     @Test
