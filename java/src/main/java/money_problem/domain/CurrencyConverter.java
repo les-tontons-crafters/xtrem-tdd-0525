@@ -18,15 +18,15 @@ public final class CurrencyConverter {
         exchangeRatesNew.add(exchangeRate);
     }
 
-    public ConversionResult convert(Position position, Currency currency) {
-        if (position.currency() == currency) {
+    public ConversionResult convert(Position position, Currency targetCurrency) {
+        if (position.isTargetCurrency(targetCurrency)) {
             return new ConversionResult(position);
         }
 
-        return findExchangeRate(position.currency(), currency)
-                .map(exchangeRate -> applyExchangeRateToPosition(position, currency, exchangeRate))
+        return findExchangeRate(position.currency(), targetCurrency)
+                .map(exchangeRate -> applyExchangeRateToPosition(position, targetCurrency, exchangeRate))
                 .map(ConversionResult::new)
-                .orElse(createFailureWithMissingExchangeRate(position, currency));
+                .orElse(createFailureWithMissingExchangeRate(position, targetCurrency));
     }
 
     private static ConversionResult createFailureWithMissingExchangeRate(Position position, Currency currency) {

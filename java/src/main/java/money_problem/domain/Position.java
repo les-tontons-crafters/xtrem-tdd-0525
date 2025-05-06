@@ -12,4 +12,8 @@ public record Position(double amount, Currency currency) {
     public double divide(int divisor) {
         return amount() / divisor;
     }
+
+    public boolean isTargetCurrency(Currency targetCurrency) {
+        return currency.equals(targetCurrency);
+    }
 }
