@@ -17,7 +17,6 @@ public class Result<S extends Money, F extends ConversionError> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Result<?, ?> result = (Result<?, ?>) o;
         return Objects.equals(money, result.money) && Objects.equals(conversionError, result.conversionError);

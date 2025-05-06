@@ -107,7 +107,8 @@ class PortfolioTest {
     @Test
     void conversionError() {
         Portfolio testee = new Portfolio(currencyConverter);
-
+        testee.add(new Money(10, USD));
+        
         Result<Money, ConversionError> actual = testee.amountNew(KRW);
 
         Result<Money, ConversionError> expected = new Result<>(new ConversionError("wayne"));

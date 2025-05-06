@@ -36,7 +36,11 @@ public class Portfolio {
     }
 
     public Result<Money, ConversionError> amountNew(Currency currency) {
-        return new Result<>(new Money(1.0, Currency.EUR));
+	    try {
+		    return new Result<>(amount(currency));
+	    } catch (MissingExchangeRatesException e) {
+            return new Result<>(new ConversionError("wayne"));
+	    }
     }
 
 }
