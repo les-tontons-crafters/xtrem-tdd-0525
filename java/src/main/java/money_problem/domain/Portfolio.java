@@ -35,4 +35,8 @@ public class Portfolio {
         return new Money(totalPortfolioValue, currency);
     }
 
+    public Result<Money, ConversionError> amountNew(Currency currency) {
+        return new Result<>("wayne");
+    }
+
 }

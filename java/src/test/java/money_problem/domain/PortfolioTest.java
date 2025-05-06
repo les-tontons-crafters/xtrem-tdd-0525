@@ -104,4 +104,10 @@ class PortfolioTest {
                 .hasMessage("KRW->EUR,USD->EUR");
     }
 
+    @Test
+    void foo() {
+        Portfolio testee = new Portfolio(currencyConverter);
+        assertThat(testee.amountNew(KRW)).isEqualTo(new Result<Money, ConversionError>("wayne"));
+    }
+
 }
