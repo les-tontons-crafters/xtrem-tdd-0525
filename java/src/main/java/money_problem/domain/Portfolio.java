@@ -1,13 +1,9 @@
 package money_problem.domain;
 
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.List;
-import java.util.Map;
 
 public class Portfolio {
-
-    private final Map<Currency, Double> currencyMap = new EnumMap<>(Currency.class);
 
     private final List<Money> moneyList = new ArrayList<>();
 
@@ -18,10 +14,6 @@ public class Portfolio {
     }
 
     public void add(Money money) {
-        double previousAmount = currencyMap.getOrDefault(money.currency(), 0.0);
-        double currentAmount = money.amount() + previousAmount;
-        currencyMap.put(money.currency(), currentAmount);
-
         moneyList.add(money);
     }
 
