@@ -28,9 +28,10 @@ class PortfolioTest {
 
 	@Test
 	@DisplayName("1.2 USD = 1 EUR")
-	void getTotalInEur() throws MissingExchangeRatesException {
+	void getTotalInEur() {
 		portfolio.add(new Position(1.2, Currency.USD));
-		Assertions.assertThat(portfolio.getTotal(Currency.EUR)).isEqualTo(new Position(1, EUR));
+		Assertions.assertThat(portfolio.getTotalNew(EUR)).isEqualTo(new ConversionResult(new Position(1, EUR)));
+
 	}
 
 	@Test

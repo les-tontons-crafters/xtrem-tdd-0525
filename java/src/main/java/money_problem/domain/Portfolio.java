@@ -35,4 +35,12 @@ public class Portfolio {
         }
         return new Position(sum, targetCurrency);
     }
+
+    public ConversionResult getTotalNew(Currency currency) {
+        try {
+            return new ConversionResult(getTotal(currency));
+        } catch (MissingExchangeRatesException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
