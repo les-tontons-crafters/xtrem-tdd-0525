@@ -50,12 +50,21 @@ class PortfolioTest {
 	}
 
 	@Test
-	void getTotalShouldReturnMissingExchangeRatesExceptionWhenMultipleExchangeRatesMissing() {
+	void getTotalShouldReturnMissingExchangeRatesExceptionWhenMultipleRatesMissing() {
 		var portfolio = new Portfolio(CurrencyConverter.withExchangeRate(KRW, USD, 1));
 		portfolio.add(new Position(1100, KRW));
 		portfolio.add(new Position(1, Currency.USD));
 		assertThatThrownBy(() -> portfolio.getTotal(EUR))
 				.isInstanceOf(MissingExchangeRatesException.class)
 				.hasMessage("KRW->EUR,USD->EUR");
+	}
+
+	@Test
+	void getTotalShouldReturnMissingExchangeRatesExceptionWhenSingleRateMissing() {
+		var portfolio = new Portfolio(CurrencyConverter.withExchangeRate(KRW, USD, 1));
+		portfolio.add(new Position(1100, KRW));
+		assertThatThrownBy(() -> portfolio.getTotal(EUR))
+				.isInstanceOf(MissingExchangeRatesException.class)
+				.hasMessage("KRW->EUR");
 	}
 }
