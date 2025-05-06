@@ -13,39 +13,24 @@ public class Portfolio {
 
     private final CurrencyConverter currencyConverter;
 
-    public Portfolio(final CurrencyConverter currencyConverter) {
+    public Portfolio(CurrencyConverter currencyConverter) {
         this.currencyConverter = currencyConverter;
     }
 
-    public void add(final Money money) {
-        final double previousAmount = currencyMap.getOrDefault(money.currency(), 0.0);
-        final double currentAmount = money.amount() + previousAmount;
+    public void add(Money money) {
+        double previousAmount = currencyMap.getOrDefault(money.currency(), 0.0);
+        double currentAmount = money.amount() + previousAmount;
         currencyMap.put(money.currency(), currentAmount);
 
         moneyList.add(money);
     }
 
-    public double amount(final Currency to) throws MissingExchangeRateException {
+    public Money amount(Currency currency) throws MissingExchangeRateException {
         var totalPortfolioValue = 0.0;
-        for (final Map.Entry<Currency, Double> entry : currencyMap.entrySet()) {
-            totalPortfolioValue += currencyConverter.convert(entry.getValue(), entry.getKey(), to);
+        for (Money money : moneyList) {
+            totalPortfolioValue += currencyConverter.convert(money.amount(), money.currency(), currency);
         }
-        return totalPortfolioValue;
+        return new Money(totalPortfolioValue, currency);
     }
 
-    public Money amountWithMoney(final Currency currency) throws MissingExchangeRateException {
-        // TODO : implement with a basic for loop for now, this method should replace method 'amount()'
-        final var doubleStream = moneyList.stream()
-                .map(m -> {
-                    try {
-                        // TODO : use Money as well in the convert method
-                        return currencyConverter.convert(m.amount(), m.currency(), currency);
-                    } catch (final MissingExchangeRateException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
-
-
-        return new Money(amount(currency), currency);
-    }
 }
