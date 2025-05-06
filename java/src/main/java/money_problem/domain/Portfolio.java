@@ -16,7 +16,7 @@ public class Portfolio {
         positions.add(position);
     }
 
-    public Position getTotal(Currency targetCurrency) throws MissingExchangeRatesException {
+    public Position getTotal(Currency targetCurrency) throws Exception {
         double sum = 0;
         List<String> errorMessages = new ArrayList<>();
         for (Position position : positions) {
@@ -39,8 +39,8 @@ public class Portfolio {
     public ConversionResult getTotalNew(Currency currency) {
         try {
             return new ConversionResult(getTotal(currency));
-        } catch (MissingExchangeRatesException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            return new ConversionResult(e);
         }
     }
 }

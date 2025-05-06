@@ -1,11 +1,11 @@
 package money_problem.domain;
 
-public record ConversionResult(Position success, MissingExchangeRateException failure) {
+public record ConversionResult(Position success, Exception failure) {
     public ConversionResult(Position position) {
         this(position, null);
     }
 
-    public ConversionResult(MissingExchangeRateException exception) {
+    public ConversionResult(Exception exception) {
         this(null, exception);
     }
 
