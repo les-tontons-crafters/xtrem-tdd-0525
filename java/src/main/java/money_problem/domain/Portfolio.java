@@ -17,10 +17,20 @@ public class Portfolio {
         moneyList.add(money);
     }
 
-    public Money amount(Currency currency) throws MissingExchangeRateException {
+    public Money amount(Currency currency) throws MissingExchangeRatesException {
         var totalPortfolioValue = 0.0;
+        List<String> missingExchangeRates = new ArrayList<>();
         for (Money money : moneyList) {
-            totalPortfolioValue += currencyConverter.convert(new Money(money.amount(), money.currency()), currency);
+            try {
+                totalPortfolioValue += currencyConverter.convert(new Money(money.amount(), money.currency()), currency);
+
+            } catch (MissingExchangeRateException e) {
+                missingExchangeRates.add(e.getMessage());
+
+            }
+        }
+        if (!missingExchangeRates.isEmpty()) {
+            throw new MissingExchangeRatesException(missingExchangeRates);
         }
         return new Money(totalPortfolioValue, currency);
     }
