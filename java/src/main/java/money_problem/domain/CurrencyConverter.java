@@ -42,4 +42,7 @@ public final class CurrencyConverter {
         return exchangeRatesNew.stream().filter(exchangeRate -> exchangeRate.from().equals(from) && exchangeRate.to().equals(to)).findFirst();
     }
 
+    public Result<Position, ExchangeRate> convertNew(Position position, Currency currency) {
+        return Result.fromSuccess(convert(position, currency).success());
+    }
 }

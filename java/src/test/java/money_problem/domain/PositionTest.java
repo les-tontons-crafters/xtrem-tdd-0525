@@ -10,7 +10,7 @@ class PositionTest {
     @Test
     @DisplayName("5 USD + 10 USD = 15 USD")
     void shouldAddInUsd() {
-        assertThat(new Position(5, USD).add(10)).isEqualTo(15);
+        assertThat(new Position(5, USD) .add(10)).isEqualTo(15);
     }
 
     @Test
