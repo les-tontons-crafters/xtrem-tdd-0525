@@ -22,7 +22,7 @@ public class Portfolio {
         for (Position position : positions) {
             double converted = 0;
             try {
-                converted = currencyConverter.convert(position.amount(), position.currency(), targetCurrency);
+                converted = currencyConverter.convert(new Position(position.amount(), position.currency()), targetCurrency);
             } catch (MissingExchangeRateException e) {
                 errorMessages.add(e.getMessage());
             }
@@ -31,7 +31,6 @@ public class Portfolio {
         if (!errorMessages.isEmpty()) {
             throw new MissingExchangeRatesException(errorMessages);
         }
-
         return sum;
     }
 }

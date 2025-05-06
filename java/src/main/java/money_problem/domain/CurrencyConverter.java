@@ -25,17 +25,17 @@ public final class CurrencyConverter {
         return from + "->" + to;
     }
 
-    public double convert(double amount, Currency from, Currency to) throws MissingExchangeRateException {
-        if (!canConvert(from, to)) {
-            throw new MissingExchangeRateException(from, to);
+    public double convert(Position position, Currency to) throws MissingExchangeRateException {
+        if (!canConvert(position.currency(), to)) {
+            throw new MissingExchangeRateException(position.currency(), to);
         }
-        return convertSafely(amount, from, to);
+        return convertSafely(position, to);
     }
 
-    private double convertSafely(double amount, Currency from, Currency to) {
-        return from == to
-                ? amount
-                : amount * exchangeRates.get(keyFor(from, to));
+    private double convertSafely(Position position, Currency to) {
+        return position.currency() == to
+                ? position.amount()
+                : position.amount() * exchangeRates.get(keyFor(position.currency(), to));
     }
 
     private boolean canConvert(Currency from, Currency to) {
