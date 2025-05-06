@@ -53,7 +53,7 @@ class PortfolioTest {
         var portfolio = new Portfolio(CurrencyConverter.withExchangeRate(new ExchangeRate(KRW, USD, 1)));
         portfolio.add(new Position(1100, KRW));
         portfolio.add(new Position(1, Currency.USD));
-        assertThat(portfolio.getTotal(EUR).failure()).contains(new ExchangeRate(KRW, EUR, 0.0), new ExchangeRate(USD, EUR, 0.0))
+        assertThat(portfolio.getTotal(EUR).failure()).contains(new MissingExchangeRate(KRW, EUR ), new MissingExchangeRate(USD, EUR))
 				.hasSize(2);
     }
 
@@ -61,6 +61,6 @@ class PortfolioTest {
     void getTotalShouldReturnMissingExchangeRatesExceptionWhenSingleRateMissing() {
         var portfolio = new Portfolio(CurrencyConverter.withExchangeRate(new ExchangeRate(KRW, USD, 1)));
         portfolio.add(new Position(1100, KRW));
-        assertThat(portfolio.getTotal(EUR).failure()).contains(new ExchangeRate(KRW, EUR, 0)).hasSize(1);
+        assertThat(portfolio.getTotal(EUR).failure()).contains(new MissingExchangeRate(KRW, EUR)).hasSize(1);
     }
 }

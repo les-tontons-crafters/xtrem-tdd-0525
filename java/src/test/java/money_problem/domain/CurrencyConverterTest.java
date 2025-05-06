@@ -1,5 +1,6 @@
 package money_problem.domain;
 
+import org.assertj.vavr.api.VavrAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -27,7 +28,7 @@ class CurrencyConverterTest {
     @DisplayName("Throws a MissingExchangeRateException in case of missing exchange rates")
     void shouldReturnALeftOnMissingExchangeRate() {
         assertThat(currencyConverter.convert(new Position(10, EUR), KRW))
-                .isEqualTo(Result.fromFailure(new ExchangeRate(EUR, KRW, 0)));
+                .isEqualTo(Result.fromFailure(new MissingExchangeRate(EUR, KRW)));
     }
 
     @Test

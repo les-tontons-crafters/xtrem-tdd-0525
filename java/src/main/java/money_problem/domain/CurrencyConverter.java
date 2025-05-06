@@ -18,8 +18,8 @@ public final class CurrencyConverter {
         exchangeRatesNew.add(exchangeRate);
     }
 
-    private static ExchangeRate createFailureWithMissingExchangeRate(Position position, Currency currency) {
-        return new ExchangeRate(position.currency(), currency, 0);
+    private static MissingExchangeRate createFailureWithMissingExchangeRate(Position position, Currency currency) {
+        return new MissingExchangeRate(position.currency(), currency);
     }
 
     private static Position applyExchangeRateToPosition(Position position, Currency currency, ExchangeRate test) {
@@ -30,13 +30,13 @@ public final class CurrencyConverter {
         return exchangeRatesNew.stream().filter(exchangeRate -> exchangeRate.from().equals(from) && exchangeRate.to().equals(to)).findFirst();
     }
 
-    public Result<Position, ExchangeRate> convert(Position position, Currency targetCurrency) {
+    public Result<Position, MissingExchangeRate> convert(Position position, Currency targetCurrency) {
         if (position.isTargetCurrency(targetCurrency)) {
             return Result.fromSuccess(position);
         }
         return findExchangeRate(position.currency(), targetCurrency)
                 .map(exchangeRate -> applyExchangeRateToPosition(position, targetCurrency, exchangeRate))
-                .map(Result::<Position, ExchangeRate>fromSuccess)
+                .map(Result::<Position, MissingExchangeRate>fromSuccess)
                 .orElse(Result.fromFailure(createFailureWithMissingExchangeRate(position, targetCurrency)));
     }
 }

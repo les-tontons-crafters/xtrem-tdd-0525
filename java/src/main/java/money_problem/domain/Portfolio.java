@@ -16,9 +16,9 @@ public class Portfolio {
         positions.add(position);
     }
 
-    public Result<Position, List<ExchangeRate>> getTotal(Currency targetCurrency) {
+    public Result<Position, List<MissingExchangeRate>> getTotal(Currency targetCurrency) {
         double sum = 0;
-        List<ExchangeRate> missingExchangeRates = new ArrayList<>();
+        List<MissingExchangeRate> missingExchangeRates = new ArrayList<>();
         for (Position position : positions) {
             var converted = currencyConverter.convert(new Position(position.amount(), position.currency()), targetCurrency);
             if (converted.isFailure()) {
