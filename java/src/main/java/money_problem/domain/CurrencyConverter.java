@@ -17,15 +17,8 @@ public final class CurrencyConverter {
         exchangeRate1.ifPresent(exchangeRatesNew::remove);
         exchangeRatesNew.add(exchangeRate);
     }
-
-    public Position convert(Position position, Currency targetCurrency) throws MissingExchangeRateException {
-        if (!canConvert(position.currency(), targetCurrency)) {
-            throw new MissingExchangeRateException(position.currency(), targetCurrency);
-        }
-        return new Position(convertSafely(position, targetCurrency), targetCurrency);
-    }
-
-    public ConversionResult convertNew(Position position, Currency currency) {
+    
+    public ConversionResult convert(Position position, Currency currency) {
             if (!canConvert(position.currency(), currency)) {
                 return new ConversionResult(new MissingExchangeRateException(position.currency(), currency));
             }

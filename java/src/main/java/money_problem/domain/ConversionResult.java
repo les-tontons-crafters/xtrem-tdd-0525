@@ -8,4 +8,8 @@ public record ConversionResult(Position success, MissingExchangeRateException fa
     public ConversionResult(MissingExchangeRateException exception) {
         this(null, exception);
     }
+
+    public boolean isFailure() {
+        return this.failure != null;
+    }
 }

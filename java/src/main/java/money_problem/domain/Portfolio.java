@@ -22,7 +22,10 @@ public class Portfolio {
         for (Position position : positions) {
             try {
                 var converted = currencyConverter.convert(new Position(position.amount(), position.currency()), targetCurrency);
-                sum += converted.amount();
+                if(converted.isFailure()){
+                    throw converted.failure();
+                }
+                sum += converted.success().amount();
             } catch (MissingExchangeRateException e) {
                 errorMessages.add(e.getMessage());
             }

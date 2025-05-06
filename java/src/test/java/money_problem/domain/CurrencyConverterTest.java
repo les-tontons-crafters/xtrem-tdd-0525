@@ -12,33 +12,33 @@ class CurrencyConverterTest {
     @Test
     @DisplayName("10 EUR -> USD = 12 USD")
     void shouldConvertEuroToUsd()  {
-        assertThat(currencyConverter.convertNew(new Position(10, EUR), USD))
+        assertThat(currencyConverter.convert(new Position(10, EUR), USD))
                 .isEqualTo(new ConversionResult(new Position(12, USD)));
     }
 
     @Test
     @DisplayName("10 EUR -> EUR = 10 EUR")
     void shouldConvertInSameCurrency()  {
-        assertThat(currencyConverter.convertNew(new Position(10, EUR), EUR))
+        assertThat(currencyConverter.convert(new Position(10, EUR), EUR))
                 .isEqualTo(new ConversionResult(new Position(10, Currency.EUR)));
     }
 
     @Test
     @DisplayName("Throws a MissingExchangeRateException in case of missing exchange rates")
     void shouldReturnALeftOnMissingExchangeRate() {
-        assertThat(currencyConverter.convertNew(new Position(10, EUR), KRW).failure().getMessage())
+        assertThat(currencyConverter.convert(new Position(10, EUR), KRW).failure().getMessage())
                 .isEqualTo(new ConversionResult(new MissingExchangeRateException(EUR, KRW)).failure().getMessage());
     }
 
     @Test
     @DisplayName("Conversion with different exchange rates EUR to USD")
     void shouldConvertWithDifferentExchangeRates()  {
-        assertThat(currencyConverter.convertNew(new Position(10, EUR), USD))
+        assertThat(currencyConverter.convert(new Position(10, EUR), USD))
                 .isEqualTo(new ConversionResult(new Position(12, USD)));
 
         currencyConverter.addExchangeRate(new ExchangeRate(EUR, USD, 1.3));
 
-        assertThat(currencyConverter.convertNew(new Position(10, EUR), USD))
+        assertThat(currencyConverter.convert(new Position(10, EUR), USD))
                 .isEqualTo(new ConversionResult(new Position(13, USD)));
     }
 }
