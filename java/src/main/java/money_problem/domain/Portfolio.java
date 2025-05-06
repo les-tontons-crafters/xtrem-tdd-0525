@@ -16,6 +16,7 @@ public class Portfolio {
         positions.add(position);
     }
 
+    // Expectation: public Result<Position, List<ExchangeRate>> getTotal(Currency targetCurrency)
     public ConversionResult getTotal(Currency targetCurrency) {
         try {
             double sum = 0;

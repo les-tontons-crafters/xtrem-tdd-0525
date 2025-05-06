@@ -18,6 +18,7 @@ public final class CurrencyConverter {
         exchangeRatesNew.add(exchangeRate);
     }
 
+    // Expectation: public Result<Position, ExchangeRate> getTotal(Currency targetCurrency)
     public ConversionResult convert(Position position, Currency targetCurrency) {
         if (position.isTargetCurrency(targetCurrency)) {
             return new ConversionResult(position);
