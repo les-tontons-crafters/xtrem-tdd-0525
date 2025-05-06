@@ -20,13 +20,12 @@ public class Portfolio {
         double sum = 0;
         List<String> errorMessages = new ArrayList<>();
         for (Position position : positions) {
-            double converted = 0;
             try {
-                converted = currencyConverter.convert(new Position(position.amount(), position.currency()), targetCurrency);
+                var converted = currencyConverter.convert(new Position(position.amount(), position.currency()), targetCurrency);
+                sum += converted.amount();
             } catch (MissingExchangeRateException e) {
                 errorMessages.add(e.getMessage());
             }
-            sum += converted;
         }
         if (!errorMessages.isEmpty()) {
             throw new MissingExchangeRatesException(errorMessages);

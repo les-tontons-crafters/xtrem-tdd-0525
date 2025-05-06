@@ -17,12 +17,12 @@ public final class CurrencyConverter {
         exchangeRate1.ifPresent(exchangeRatesNew::remove);
         exchangeRatesNew.add(exchangeRate);
     }
-
-    public double convert(Position position, Currency to) throws MissingExchangeRateException {
-        if (!canConvert(position.currency(), to)) {
-            throw new MissingExchangeRateException(position.currency(), to);
+    
+    public Position convert(Position position, Currency targetCurrency) throws MissingExchangeRateException {
+        if (!canConvert(position.currency(), targetCurrency)) {
+            throw new MissingExchangeRateException(position.currency(), targetCurrency);
         }
-        return convertSafely(position, to);
+        return new Position(convertSafely(position, targetCurrency), targetCurrency);
     }
 
     private double convertSafely(Position position, Currency to) {

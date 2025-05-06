@@ -14,14 +14,14 @@ class CurrencyConverterTest {
     @DisplayName("10 EUR -> USD = 12 USD")
     void shouldConvertEuroToUsd() throws MissingExchangeRateException {
         assertThat(currencyConverter.convert(new Position(10, EUR), USD))
-                .isEqualTo(12);
+                .isEqualTo(new Position(12,USD));
     }
 
     @Test
     @DisplayName("10 EUR -> EUR = 10 EUR")
     void shouldConvertInSameCurrency() throws MissingExchangeRateException {
         assertThat(currencyConverter.convert(new Position(10, EUR), EUR))
-                .isEqualTo(10);
+                .isEqualTo(new Position(10, Currency.EUR));
     }
 
     @Test
@@ -36,11 +36,11 @@ class CurrencyConverterTest {
     @DisplayName("Conversion with different exchange rates EUR to USD")
     void shouldConvertWithDifferentExchangeRates() throws MissingExchangeRateException {
         assertThat(currencyConverter.convert(new Position(10, EUR), USD))
-                .isEqualTo(12);
+                .isEqualTo(new Position(12, USD));
 
         currencyConverter.addExchangeRate(new ExchangeRate(EUR, USD, 1.3));
 
         assertThat(currencyConverter.convert(new Position(10, EUR), USD))
-                .isEqualTo(13);
+                .isEqualTo(new Position(13, USD));
     }
 }
