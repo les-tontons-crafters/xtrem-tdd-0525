@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class CurrencyConverterTest {
-    private final CurrencyConverter currencyConverter = CurrencyConverter.withExchangeRate(EUR, USD, 1.2);
+    private final CurrencyConverter currencyConverter = CurrencyConverter.withExchangeRate(new ExchangeRate(EUR, USD, 1.2));
 
     @Test
     @DisplayName("10 EUR -> USD = 12 USD")

@@ -10,9 +10,9 @@ public final class CurrencyConverter {
         this.exchangeRates = exchangeRates;
     }
 
-    public static CurrencyConverter withExchangeRate(Currency from, Currency to, double rate) {
+    public static CurrencyConverter withExchangeRate(ExchangeRate exchangeRate) {
         var bank = new CurrencyConverter(new HashMap<>());
-        bank.addExchangeRate(from, to, rate);
+        bank.addExchangeRate(exchangeRate.from(), exchangeRate.to(), exchangeRate.rate());
 
         return bank;
     }

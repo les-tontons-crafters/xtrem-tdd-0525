@@ -16,7 +16,7 @@ class PortfolioTest {
 
 	@BeforeAll
 	static void setup() {
-		currencyConverter = CurrencyConverter.withExchangeRate(USD, EUR, 1.0 / 1.2);
+		currencyConverter = CurrencyConverter.withExchangeRate(new ExchangeRate(USD, EUR, 1.0 / 1.2));
 		currencyConverter.addExchangeRate(EUR, USD, 1.2);
 		currencyConverter.addExchangeRate(USD, KRW, 1100);
 	}
@@ -51,7 +51,7 @@ class PortfolioTest {
 
 	@Test
 	void getTotalShouldReturnMissingExchangeRatesExceptionWhenMultipleRatesMissing() {
-		var portfolio = new Portfolio(CurrencyConverter.withExchangeRate(KRW, USD, 1));
+		var portfolio = new Portfolio(CurrencyConverter.withExchangeRate(new ExchangeRate(KRW, USD, 1)));
 		portfolio.add(new Position(1100, KRW));
 		portfolio.add(new Position(1, Currency.USD));
 		assertThatThrownBy(() -> portfolio.getTotal(EUR))
@@ -61,7 +61,7 @@ class PortfolioTest {
 
 	@Test
 	void getTotalShouldReturnMissingExchangeRatesExceptionWhenSingleRateMissing() {
-		var portfolio = new Portfolio(CurrencyConverter.withExchangeRate(KRW, USD, 1));
+		var portfolio = new Portfolio(CurrencyConverter.withExchangeRate(new ExchangeRate(KRW, USD, 1)));
 		portfolio.add(new Position(1100, KRW));
 		assertThatThrownBy(() -> portfolio.getTotal(EUR))
 				.isInstanceOf(MissingExchangeRatesException.class)
