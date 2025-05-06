@@ -82,7 +82,7 @@ class PortfolioTest {
     @CsvSource({
             "1.0, 0.0, 0.0, 1.0"
     })
-    void addAmmount(double dollar, double euro, double southKoreanWon, double expectedTotalAmmount) throws MissingExchangeRateException {
+    void addAmount(double dollar, double euro, double southKoreanWon, double expectedTotalAmount) throws MissingExchangeRateException {
         currencyConverter.addExchangeRate(EUR, USD, 1.2);
         currencyConverter.addExchangeRate(KRW, USD, 0.00073);
 
@@ -91,7 +91,7 @@ class PortfolioTest {
         testee.add(southKoreanWons(southKoreanWon));
 
         assertThat(testee.amount(USD).amount())
-                .isCloseTo(expectedTotalAmmount, Offset.offset(0.01));
+                .isCloseTo(expectedTotalAmount, Offset.offset(0.01));
     }
 
     @Disabled
