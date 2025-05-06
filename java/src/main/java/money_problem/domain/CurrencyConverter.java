@@ -43,6 +43,10 @@ public final class CurrencyConverter {
     }
 
     public Result<Position, ExchangeRate> convertNew(Position position, Currency currency) {
-        return Result.fromSuccess(convert(position, currency).success());
+        ConversionResult conversionResult = convert(position, currency);
+        if (conversionResult.isFailure()) {
+            return Result.fromFailure(new ExchangeRate(position.currency(), currency, 0));
+        }
+        return Result.fromSuccess(conversionResult.success());
     }
 }

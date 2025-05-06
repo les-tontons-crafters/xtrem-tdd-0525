@@ -8,4 +8,8 @@ public record Result<S, F>(S success, F failure) {
     public static <S, F> Result<S, F> fromFailure(F failureValue) {
         return new Result<>(null, failureValue);
     }
+
+    public boolean isFailure() {
+        return this.failure != null;
+    }
 }

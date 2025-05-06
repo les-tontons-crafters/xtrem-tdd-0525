@@ -26,8 +26,8 @@ class CurrencyConverterTest {
     @Test
     @DisplayName("Throws a MissingExchangeRateException in case of missing exchange rates")
     void shouldReturnALeftOnMissingExchangeRate() {
-        assertThat(currencyConverter.convert(new Position(10, EUR), KRW).failure().getMessage())
-                .isEqualTo(new ConversionResult(new MissingExchangeRateException(EUR, KRW)).failure().getMessage());
+        assertThat(currencyConverter.convertNew(new Position(10, EUR), KRW))
+                .isEqualTo(Result.fromFailure(new ExchangeRate(EUR, KRW, 0)));
     }
 
     @Test
