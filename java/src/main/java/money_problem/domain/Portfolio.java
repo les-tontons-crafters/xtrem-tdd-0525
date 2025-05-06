@@ -36,7 +36,7 @@ public class Portfolio {
     }
 
     public Result<Money, ConversionError> amountNew(Currency currency) {
-        return new Result<>("wayne");
+        return new Result<>(new Money(1.0, Currency.EUR));
     }
 
 }

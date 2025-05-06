@@ -110,7 +110,7 @@ class PortfolioTest {
 
         Result<Money, ConversionError> actual = testee.amountNew(KRW);
 
-        Result<Money, ConversionError> expected = new ConversionError("wayne");
+        Result<Money, ConversionError> expected = new Result<>(new ConversionError("wayne"));
         assertThat(actual).isEqualTo(expected);
     }
 
