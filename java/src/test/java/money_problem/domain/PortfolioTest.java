@@ -1,5 +1,7 @@
 package money_problem.domain;
 
+import io.vavr.control.Either;
+import org.assertj.vavr.api.VavrAssertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -30,6 +32,31 @@ class PortfolioTest {
     void getTotalInEur() {
         portfolio.add(new Position(1.2, Currency.USD));
         assertThat(portfolio.getTotal(EUR)).isEqualTo(Result.fromSuccess(new Position(1, EUR)));
+
+
+        Either<String, Integer> hundred = Either.<String, Integer>right(100).flatMap(this::getHalf).flatMap(this::getHalf);
+        VavrAssertions.assertThat(hundred).containsOnRight(25);
+
+        Either<String, Integer> fifty = Either.<String, Integer>right(50).flatMap(this::getHalf).flatMap(this::getHalf);
+        VavrAssertions.assertThat(fifty).containsOnLeft("Cannot split in half");
+
+        Either<String, Integer> two_hundreds = Either.<String, Integer>right(50)
+                .flatMap(this::getHalf)
+                .flatMap(this::getHalf)
+                .flatMap(this::getHalf)
+                .flatMap(this::getHalf)
+                .flatMap(this::getHalf)
+                .flatMap(this::getHalf)
+                .flatMap(this::getHalf);
+        VavrAssertions.assertThat(two_hundreds).containsOnLeft("Cannot split in half");
+    }
+
+    private Either<String, Integer> getHalf(Integer value) {
+        if (value % 2 != 0) {
+            return Either.left("Cannot split in half");
+        }
+
+        return Either.right(value / 2);
     }
 
     @Test
